@@ -3,4 +3,6 @@ Flask==2.0.2
 itsdangerous==2.0.1
 Jinja2==3.0.3
 MarkupSafe==2.0.1
-Werkzeug==2.0.3
+openpyxl==3.0.9
+pandas==1.4.1
+Werkzeug==2.0.3s

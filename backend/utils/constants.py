@@ -1,2 +1,2 @@
-ALLOWED_EXTENSIONS = {'.csv', '.xslx'}
-UPLOAD_FOLDER = '/data'
+ALLOWED_EXTENSIONS = {'csv', 'xlsx'}
+UPLOAD_FOLDER = '../data'
