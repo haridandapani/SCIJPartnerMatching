@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, redirect, flash, url_for, render_template
+from flask import Flask, request, redirect, flash, url_for, render_template, current_app, send_from_directory
 from werkzeug.utils import secure_filename
 import pandas as pd
 
@@ -16,18 +16,6 @@ def upload_data():
     '''
     File upload endpoint. Adapted from https://flask.palletsprojects.com/en/2.0.x/patterns/fileuploads/
     '''
-    """ # check if the post request has the file part
-    if 'link' in request.form: 
-        link = request.form['link']
-        # TODO: do something with the sheets link
-        print(link)
-        data = preprocess(link, is_link=True)
-        #return redirect(request.url)
-
-    elif 'file' not in request.files:
-        flash('No file part')
-        return redirect(request.url) """
-
     if request.method == 'GET': 
         return '''
         <!doctype html>
@@ -63,7 +51,7 @@ def upload_data():
     # return data # frontend takes universal format and asks user for matching criteria
     return render_template('simple.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
     
-@app.route('/match', methods=['POST'])
+@app.route('/match', methods=['GET', 'POST'])
 def match(): 
     '''
     Takes user defined criteria and creates top n pairs
@@ -85,6 +73,16 @@ def selection():
     # redirect to home 
     pass 
 
+@app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
+def download(filename): 
+    # set this up as a route
+    # url_for("download_file", name=name) generates download url
+    uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
+    return send_from_directory(directory=uploads, path=filename)
+
+# Any time in the backend when you need to save a file, save it to the uploads folder
+
+########### HTML STUFF ###########
 
 if __name__ == '__main__': 
     app.secret_key = 'super secret key'
