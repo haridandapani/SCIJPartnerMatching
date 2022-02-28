@@ -46,7 +46,7 @@ def upload_data():
     if df is None: 
         flash('Error parsing file')
         return redirect(request.url) 
-    print(df)
+    headers_dict = convertDataframeValuesToHeaders(df.values)
     #data = preprocess(file)
     # return data # frontend takes universal format and asks user for matching criteria
     return render_template('simple.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
