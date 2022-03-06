@@ -65,8 +65,37 @@ def createStudents(headers_dict, column_dict, parser_dict, data_values):
             student_attributes[key] = parse_function(student_values[column_dict[key]])
         allStudents.append(MatchableStudent(student_attributes))
     return allStudents
-    
-        
+
+def compareStudents(student_one, student_two, headers):
+    comparators = comparison.getComparators()
+    overlap = dict()
+    for header_keys in headers:
+        this_header = headers[header_keys]
+        if this_header.datatype in comparators:
+            this_comparator = comparators[this_header.datatype]
+            s1attribute = student_one.attributes[this_header.header]
+            s2attribute = student_two.attributes[this_header.header]
+            comp = this_comparator(s1attribute, s2attribute)
+            overlap[this_header.header] = comp
+    #print(overlap)
+    return overlap
+
+def compareAllStudents(allStudents, headers):
+    name = ""
+    for header_keys in headers:
+        if headers[header_keys].datatype == "name":
+            name = headers[header_keys].header
+
+    matrix = dict()
+    for i in range(0, len(allStudents)):
+        for j in range(0, len(allStudents)):
+            student_one = allStudents[i]
+            student_two = allStudents[j]
+            name_one = student_one.attributes[name]
+            name_two = student_two.attributes[name]
+            matrix[(name_one, name_two)] = compareStudents(student_one, student_two, headers)
+    print("{" + "\n".join("{!r}: {!r},".format(k, v) for k, v in matrix.items()) + "}")
+    return matrix
 
 def runner():
     # headers stuff
@@ -85,6 +114,9 @@ def runner():
     parser_dict = comparison.getParserDict()
     allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
     print(allStudents)
+
+    #compareStudents(allStudents[0], allStudents[1], headers_dict)
+    compareAllStudents(allStudents, headers_dict)
     
     
     
