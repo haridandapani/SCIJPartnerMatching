@@ -3,15 +3,14 @@ import openpyxl # pip3 install openpyxl
 import comparison
 
 class Header:
-    def __init__(self, header, datatype, necessary, similar_match):
+    def __init__(self, header, datatype, necessary):
         self.header = header
         self.datatype = datatype
         self.necessary = (necessary == 1)
-        self.similar_match = (similar_match == 1)
     def __str__(self):
-        return self.header +", " + self.datatype +", "+str(self.necessary)+", "+str(self.similar_match)
+        return self.header +", " + self.datatype +", "+str(self.necessary)
     def __repr__(self):
-        return self.header +", " + self.datatype +", "+str(self.necessary)+", "+str(self.similar_match)
+        return self.header +", " + self.datatype +", "+str(self.necessary)
     def __hash__(self):
         return hash(self.header)
     def __eq__(self, other):
@@ -49,8 +48,7 @@ def convertDataframeValuesToHeaders(values):
         header = head[0]
         datatype = head[1]
         necessary = int(head[2])
-        similar_match = int(head[3])
-        headers_dict[head[0]] = Header(header, datatype, necessary, similar_match)
+        headers_dict[head[0]] = Header(header, datatype, necessary)
     return headers_dict
 
 
@@ -80,21 +78,41 @@ def compareStudents(student_one, student_two, headers):
     #print(overlap)
     return overlap
 
-def compareAllStudents(allStudents, headers):
+
+def isLegal(overlap, headers, min_hours):
+    total_hours = 0
+    for key in overlap:
+        this_header = headers[key]
+        if this_header.datatype == "hours":
+            total_hours += overlap[key]
+        elif (this_header.datatype == "similar_category_one" or this_header.datatype == "different_category_one") and this_header.necessary:
+            if not overlap[key]:
+                return False
+            
+    return total_hours >= min_hours
+
+def compareAllStudents(allStudents, headers, min_hours = 3):
     name = ""
     for header_keys in headers:
         if headers[header_keys].datatype == "name":
             name = headers[header_keys].header
 
+    legal = list()
     matrix = dict()
     for i in range(0, len(allStudents)):
-        for j in range(0, len(allStudents)):
+        for j in range(i + 1, len(allStudents)):
             student_one = allStudents[i]
             student_two = allStudents[j]
             name_one = student_one.attributes[name]
             name_two = student_two.attributes[name]
-            matrix[(name_one, name_two)] = compareStudents(student_one, student_two, headers)
+            overlap = compareStudents(student_one, student_two, headers)
+            matrix[(name_one, name_two)] = overlap
+            if isLegal(overlap, headers, min_hours):
+                legal.append((name_one, name_two))
+                
     print("{" + "\n".join("{!r}: {!r},".format(k, v) for k, v in matrix.items()) + "}")
+    print("===============================")
+    print(legal)
     return matrix
 
 def runner():

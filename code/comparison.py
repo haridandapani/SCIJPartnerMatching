@@ -14,15 +14,19 @@ def compareHours(hours_1, hours_2):
     overlap = intersection(hours_1, hours_2)
     return len(overlap)
 
-def compareCategoryOne(cat_1, cat_2):
-    return cat_1 == cat_2
+def compareCategoryOne(similar : bool):
+    if similar:
+        return lambda cat_1, cat_2: cat_1 == cat_2
+    else:
+        return lambda cat_1, cat_2: cat_1 != cat_2
 
 def getParserDict():
-    parser_dict = {"hours": generateListFromHours, "category_one": generateCategoryFromCategoryOne, "name": generateName}
+    parser_dict = {"hours": generateListFromHours, "similar_category_one": generateCategoryFromCategoryOne, "name": generateName,
+                   "different_category_one": generateCategoryFromCategoryOne}
     return parser_dict
 
 def getComparators():
-    compare_dict = {"hours": compareHours, "category_one": compareCategoryOne}
+    compare_dict = {"hours": compareHours, "similar_category_one": compareCategoryOne(True), "different_category_one": compareCategoryOne(False)}
     return compare_dict
 
 def runner():
