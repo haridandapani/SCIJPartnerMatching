@@ -51,6 +51,9 @@ def upload_data():
         flash('Error parsing file')
         return redirect(request.url) 
 
+    # headers don't need first row, need for data 
+
+    
     # return render_template('simple.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
     return None 
 
