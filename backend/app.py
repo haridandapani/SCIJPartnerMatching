@@ -3,13 +3,15 @@ from flask import Flask, request, redirect, flash, url_for, render_template, cur
 from werkzeug.utils import secure_filename
 import pandas as pd
 
+from file_processing.uploads import is_allowed_file, file_to_dataframe
+from file_processing.excel_opener import convertDataframeValuesToHeaders
+
+from matching.match import get_top_n_pairs
+
 from utils.constants import UPLOAD_FOLDER
-from utils.uploads import is_allowed_file, file_to_dataframe, preprocess
-from utils.match import get_top_n_pairs
 
 app = Flask(__name__, template_folder='templates')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDERs
 
 @app.route('/upload_data', methods=['POST', 'GET'])
 def upload_data():
@@ -27,30 +29,31 @@ def upload_data():
         </form>
         '''
 
-    file = request.files['file']
+    data_file = request.files['data']
+    headers_file = request.files['headers']
     # If the user does not select a file, the browser submits an
     # empty file without a filename.
-    if file.filename == '':
+    """ if data_file.filename == '' or headers_file.filename == '':
         flash('No selected file')
-        return redirect(request.url)
-    if not file or not is_allowed_file(file.filename):
+        return redirect(request.url) """
+    if not data_file or not is_allowed_file(data_file.filename) or not is_allowed_file(headers_file.filename):
         """ # Prevent filenames that modify important files, e.g .bashrc
         filename = secure_filename(file.filename) 
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename)) 
         return redirect(url_for('download_file', name=filename)) """
         flash('Invalid File')
-        flash(file)
-        flash(is_allowed_file(file.filename))
+        flash(data_file)
+        flash(headers_file)
         return redirect(request.url)
-    df = file_to_dataframe(file)
-    if df is None: 
+    data_df = file_to_dataframe(data_file)
+    headers_df = file_to_dataframe(headers_file)
+    if data_df is None or headers_df is None: 
         flash('Error parsing file')
         return redirect(request.url) 
-    headers_dict = convertDataframeValuesToHeaders(df.values)
-    #data = preprocess(file)
-    # return data # frontend takes universal format and asks user for matching criteria
-    return render_template('simple.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
-    
+
+    # return render_template('simple.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
+    return None 
+
 @app.route('/match', methods=['GET', 'POST'])
 def match(): 
     '''
@@ -62,6 +65,10 @@ def match():
     n = request.json['top_n']
 
     pairs = get_top_n_pairs(criterion, n)
+
+
+    # compareHours lets you get hours of overlap between 2 students. each student also has a school they need to be matched on 
+    
     return pairs 
 
 @app.route('/selection', methods=['POST'])
