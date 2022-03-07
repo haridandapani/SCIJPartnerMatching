@@ -1,0 +1,4 @@
+name
+hours
+similar_category_one
+different_category_one
