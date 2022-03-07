@@ -39,3 +39,7 @@ def runner():
     comp_hours_2 = parser_dict["hours"](hours_2)
     comparison = compareHours(comp_hours_1, comp_hours_2)
     print(comparison)
+
+
+if __name__ == "__main__":
+    runner()

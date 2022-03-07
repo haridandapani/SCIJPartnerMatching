@@ -98,9 +98,11 @@ def compareAllStudents(allStudents, headers, min_hours):
         if headers[header_keys].datatype == "name":
             name = headers[header_keys].header
 
+    allnames = list()
     legal = list()
     matrix = dict()
     for i in range(0, len(allStudents)):
+        allnames.append(allStudents[i].attributes[name])
         for j in range(i + 1, len(allStudents)):
             student_one = allStudents[i]
             student_two = allStudents[j]
@@ -114,7 +116,9 @@ def compareAllStudents(allStudents, headers, min_hours):
     print("{" + "\n".join("{!r}: {!r},".format(k, v) for k, v in matrix.items()) + "}")
     print("===============================")
     print(legal)
-    return matrix
+    print("===============================")
+    print(allnames)
+    return matrix, legal
 
 def runner():
     # headers stuff
@@ -136,8 +140,18 @@ def runner():
     min_hours = 3
     compareAllStudents(allStudents, headers_dict, min_hours)
     
-    
-    
 
+def makePairings(headers_dataframe, data_dataframe, min_hours):
+    # extracting data
+    headers_values = headers_dataframe.values
+    headers_dict = convertDataframeValuesToHeaders(headers_values)
+    data_values = data_dataframe.values
+    column_dict = getHeadersIndices(data_values)
 
-runner()
+    parser_dict = comparison.getParserDict()
+    allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
+    matrix, legal = compareAllStudents(allStudents, headers_dict, min_hours)
+    return matrix, legal
+    
+if __name__ == "__main__":
+    runner()
