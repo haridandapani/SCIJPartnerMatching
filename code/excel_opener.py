@@ -118,7 +118,7 @@ def compareAllStudents(allStudents, headers, min_hours):
     print(legal)
     print("===============================")
     print(allnames)
-    return matrix, legal
+    return matrix, legal, allnames
 
 def runner():
     # headers stuff
@@ -138,7 +138,7 @@ def runner():
     print(allStudents)
     print("===============================")
     min_hours = 3
-    compareAllStudents(allStudents, headers_dict, min_hours)
+    matrix, legal, allnames = compareAllStudents(allStudents, headers_dict, min_hours)
     
 
 def makePairings(headers_dataframe, data_dataframe, min_hours):
@@ -150,8 +150,8 @@ def makePairings(headers_dataframe, data_dataframe, min_hours):
 
     parser_dict = comparison.getParserDict()
     allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
-    matrix, legal = compareAllStudents(allStudents, headers_dict, min_hours)
-    return matrix, legal
+    matrix, legal, allnames = compareAllStudents(allStudents, headers_dict, min_hours)
+    return matrix, legal, allnames
     
 if __name__ == "__main__":
     runner()
