@@ -4,14 +4,12 @@ from werkzeug.utils import secure_filename
 import pandas as pd
 
 from file_processing.uploads import is_allowed_file, file_to_dataframe
-from file_processing.excel_opener import convertDataframeValuesToHeaders
+from file_processing.excel_opener import makePairings
 
-from matching.match import get_top_n_pairs
-
-from utils.constants import UPLOAD_FOLDER
+from utils.constants import UPLOAD_FOLDER, MIN_HOURS
 
 app = Flask(__name__, template_folder='templates')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDERs
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/upload_data', methods=['POST', 'GET'])
 def upload_data():
@@ -46,14 +44,15 @@ def upload_data():
         flash(headers_file)
         return redirect(request.url)
     data_df = file_to_dataframe(data_file)
-    headers_df = file_to_dataframe(headers_file)
+    headers_df = file_to_dataframe(headers_file, True)
     if data_df is None or headers_df is None: 
         flash('Error parsing file')
         return redirect(request.url) 
 
     # headers don't need first row, need for data 
 
-    
+    matrix, legal = makePairings(headers_df, data_df, MIN_HOURS)
+    print(legal)
     # return render_template('simple.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
     return None 
 

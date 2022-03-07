@@ -1,6 +1,6 @@
 import pandas as pd
 
-from ..utils.constants import ALLOWED_EXTENSIONS
+from utils.constants import ALLOWED_EXTENSIONS
 
 def is_allowed_file(filename): 
     return '.' in filename \
@@ -9,12 +9,18 @@ def is_allowed_file(filename):
 def get_file_type(filename): 
     return filename.rsplit('.', 1)[1].lower()
 
-def file_to_dataframe(file): 
+def file_to_dataframe(file, chop_header=False): 
     ext = get_file_type(file.filename)
 
     if ext == 'csv': 
-        return pd.read_csv(file)
+        if chop_header: 
+            return pd.read_csv(file)
+        else: 
+            return pd.read_csv(file, header=None)
     elif ext == 'xlsx': 
-        return pd.read_excel(file, engine='openpyxl')
+        if chop_header: 
+            return pd.read_excel(file, engine='openpyxl')
+        else: 
+            return pd.read_excel(file, engine='openpyxl', header=None)
     else: 
         return None  
