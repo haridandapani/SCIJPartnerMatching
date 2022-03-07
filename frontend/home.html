@@ -27,8 +27,8 @@
 
     <div class="div2">
       <p>Upload your Google Form data as an Excel file here:</p>
-      <form action="/localhost:5000/upload_data" method="post">
-        <input type="file">
+      <form action="http:/localhost:5000/upload_data" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="file">
         <p></p>
         <input type="submit" value="Submit">
       </form>
