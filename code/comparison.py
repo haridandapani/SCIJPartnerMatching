@@ -5,6 +5,8 @@ def generateCategoryFromCategoryOne(category):
     return category
 
 def generateListFromHours(hours):
+    if hours != hours:
+        return list()
     return hours.split(";")
 
 def compareHours(hours_1, hours_2):

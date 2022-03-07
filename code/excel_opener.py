@@ -60,6 +60,7 @@ def createStudents(headers_dict, column_dict, parser_dict, data_values):
             header = headers_dict[key]
             datatype = header.datatype
             parse_function = parser_dict[datatype]
+            
             student_attributes[key] = parse_function(student_values[column_dict[key]])
         allStudents.append(MatchableStudent(student_attributes))
     return allStudents
@@ -91,7 +92,7 @@ def isLegal(overlap, headers, min_hours):
             
     return total_hours >= min_hours
 
-def compareAllStudents(allStudents, headers, min_hours = 3):
+def compareAllStudents(allStudents, headers, min_hours):
     name = ""
     for header_keys in headers:
         if headers[header_keys].datatype == "name":
@@ -117,24 +118,23 @@ def compareAllStudents(allStudents, headers, min_hours = 3):
 
 def runner():
     # headers stuff
-    dataframe = excel_to_df("../data/mock_headers.xlsx")
+    dataframe = excel_to_df("../data/SCIJ_MOCK_HEADERS.xlsx") # excel_to_df("../data/mock_headers.xlsx")
     values = read_excel_file(dataframe)
     headers_dict = convertDataframeValuesToHeaders(values)
     print(headers_dict)
     print("===============================")
 
     # data stuff
-    data_values = read_excel_file(excel_to_generic_df("../data/simple_data.xlsx"))
-    #print(values)
+    data_values = read_excel_file(excel_to_generic_df("../data/SCIJ_MOCK.xlsx")) # read_excel_file(excel_to_generic_df("../data/simple_data.xlsx"))
     column_dict = getHeadersIndices(data_values)
     print(column_dict)
     print("===============================")
     parser_dict = comparison.getParserDict()
     allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
     print(allStudents)
-
-    #compareStudents(allStudents[0], allStudents[1], headers_dict)
-    compareAllStudents(allStudents, headers_dict)
+    print("===============================")
+    min_hours = 3
+    compareAllStudents(allStudents, headers_dict, min_hours)
     
     
     
