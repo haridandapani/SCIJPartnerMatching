@@ -27,8 +27,11 @@
 
     <div class="div2">
       <p>Upload your Google Form data as an Excel file here:</p>
-      <button type="button">Upload</button>
-      <p>The following form has been selected.</p>
+      <form action="/localhost:5000/upload_data" method="post">
+        <input type="file">
+        <p></p>
+        <input type="submit" value="Submit">
+      </form>
       <div class="next">
         <button type="next">next</button>
       </div>
@@ -39,7 +42,11 @@
       <p>Et has minim elitr intellegat. Mea aeterno eleifend antiopam ad,
         nam no suscipit quaerendum. At nam minimum ponderum. Est audiam animal
         molestiae te. Ex duo eripuit mentitum.</p>
-        <button type="button">Upload</button>
+        <form action="/localhost:5000/match" method="post">
+          <input type="file">
+          <p></p>
+          <input type="submit" value="Submit">
+        </form>
         <p></p>
         <button type="button">Previous</button>
 
