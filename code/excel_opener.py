@@ -101,8 +101,11 @@ def compareAllStudents(allStudents, headers, min_hours):
     allnames = list()
     legal = list()
     matrix = dict()
+    legal_dict = dict() # 0 = same person; -1  = illegal; 1 = legal
+    
     for i in range(0, len(allStudents)):
         allnames.append(allStudents[i].attributes[name])
+        legal_dict[(allStudents[i].attributes[name], allStudents[i].attributes[name])] = 0
         for j in range(i + 1, len(allStudents)):
             student_one = allStudents[i]
             student_two = allStudents[j]
@@ -112,13 +115,20 @@ def compareAllStudents(allStudents, headers, min_hours):
             matrix[(name_one, name_two)] = overlap
             if isLegal(overlap, headers, min_hours):
                 legal.append((name_one, name_two))
+                legal_dict[(name_one, name_two)] = 1
+                legal_dict[(name_two, name_one)] = 1
+            else:
+                legal_dict[(name_one, name_two)] = -1
+                legal_dict[(name_two, name_one)] = -1
                 
     print("{" + "\n".join("{!r}: {!r},".format(k, v) for k, v in matrix.items()) + "}")
     print("===============================")
     print(legal)
     print("===============================")
     print(allnames)
-    return matrix, legal, allnames
+    print("===============================")
+    print(legal_dict)
+    return matrix, legal, allnames, legal_dict
 
 def runner():
     # headers stuff
@@ -138,7 +148,7 @@ def runner():
     print(allStudents)
     print("===============================")
     min_hours = 3
-    matrix, legal, allnames = compareAllStudents(allStudents, headers_dict, min_hours)
+    matrix, legal, allnames, legal_dict = compareAllStudents(allStudents, headers_dict, min_hours)
     
 
 def makePairings(headers_dataframe, data_dataframe, min_hours):
@@ -150,8 +160,8 @@ def makePairings(headers_dataframe, data_dataframe, min_hours):
 
     parser_dict = comparison.getParserDict()
     allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
-    matrix, legal, allnames = compareAllStudents(allStudents, headers_dict, min_hours)
-    return matrix, legal, allnames
+    matrix, legal, allnames, legal_dict = compareAllStudents(allStudents, headers_dict, min_hours)
+    return matrix, legal, allnames, legal_dict
     
 if __name__ == "__main__":
     runner()
