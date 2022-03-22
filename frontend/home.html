@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
     integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="index.css">
-
     <meta content="width=device-width, initial-scale=1" name="viewport" />
   </head>
 
@@ -27,7 +26,7 @@
 
     <div class="div2">
       <p>Upload your Google Form data and Criteria as Excel or CSV files here:</p>
-      <form action="http:/localhost:5000/upload_data" method="post" enctype="multipart/form-data">
+      <form id="fileUpload">
         <label for="data">Data File:</label><br>
         <input type="file" name="data" id="file1"><br><br>
         <label for="headers">Headers File:</label><br>
@@ -62,13 +61,14 @@
 
     <div class="div5">
       <h3>Here are the possible matches:</span></h3>
-      <p>Et has minim elitr intellegat. Mea aeterno eleifend antiopam ad,
+      <!-- <p>Et has minim elitr intellegat. Mea aeterno eleifend antiopam ad,
         nam no suscipit quaerendum. At nam minimum ponderum. Est audiam animal
         molestiae te. Ex duo eripuit mentitum.</p>
         <button type="button">Export</button>
         <p></p>
 
-        <button type="button">Previous</button>
+        <button type="button">Previous</button> -->
+        <div id="pairContainer"></div>
 
     </div>
 
@@ -95,7 +95,7 @@
 
 
 
-
-
+  <!-- Loads script after body elements -->
+  <script src="index.js"></script>
   </body>
 </html>

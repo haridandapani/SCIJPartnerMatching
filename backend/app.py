@@ -1,7 +1,9 @@
 import os
-from flask import Flask, request, redirect, flash, url_for, render_template, current_app, send_from_directory
+from flask import Flask, request, redirect, flash, url_for, render_template, current_app, send_from_directory, jsonify
+from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 import pandas as pd
+import json
 
 from file_processing.uploads import is_allowed_file, file_to_dataframe
 from file_processing.excel_opener import makePairings
@@ -9,9 +11,13 @@ from file_processing.excel_opener import makePairings
 from utils.constants import UPLOAD_FOLDER, MIN_HOURS
 
 app = Flask(__name__, template_folder='templates')
+cors = CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['TESTING'] = True 
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/upload_data', methods=['POST', 'GET'])
+@cross_origin()
 def upload_data():
     '''
     File upload endpoint. Adapted from https://flask.palletsprojects.com/en/2.0.x/patterns/fileuploads/
@@ -26,7 +32,6 @@ def upload_data():
         <input type=submit value=Upload>
         </form>
         '''
-
     data_file = request.files['data']
     headers_file = request.files['headers']
     # If the user does not select a file, the browser submits an
@@ -52,9 +57,28 @@ def upload_data():
     # headers don't need first row, need for data 
 
     matrix, legal = makePairings(headers_df, data_df, MIN_HOURS)
-    print(legal)
+    # print(legal)
     # return render_template('simple.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
-    return None 
+    test = {
+        "Sabrina Mendez": {
+            "Sabrina Mendez": 0, 
+            "Madelyn Lu": -1, 
+            "Billy-Joe Ramirez": 1
+        }, 
+        "Madelyn Lu": {
+            "Sabrina Mendez": -1, 
+            "Madelyn Lu": 0, 
+            "Billy-Joe Ramirez": 1
+        }, 
+        "Billy-Joe Ramirez": {
+            "Sabrina Mendez": 1, 
+            "Madelyn Lu": 1, 
+            "Billy-Joe Ramirez": 0
+        }
+    }
+
+
+    return test
 
 @app.route('/match', methods=['GET', 'POST'])
 def match(): 

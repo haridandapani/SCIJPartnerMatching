@@ -1,0 +1,18 @@
+{
+    "Sabrina Mendez": {
+        "Sabrina Mendez": 0, 
+        "Madelyn Lu": -1, 
+        "Billy-Joe Ramirez": 1
+    }, 
+    "Madelyn Lu": {
+        "Sabrina Mendez": -1, 
+        "Madelyn Lu": 0, 
+        "Billy-Joe Ramirez": 1
+    }, 
+    "Billy-Joe Ramirez": {
+        "Sabrina Mendez": 1, 
+        "Madelyn Lu": 1, 
+        "Billy-Joe Ramirez": 0
+    }
+
+}
