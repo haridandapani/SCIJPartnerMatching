@@ -10,36 +10,70 @@
     <meta content="width=device-width, initial-scale=1" name="viewport" />
   </head>
 
+  <header-with-logo>
+    <!-- <div id="top-header">
+      <div id="logo">
+        <img src="images/scij_logo.png">
+      </div>
+
+      <nav>
+        <u1>
+          <li class="active"><a href="#">Student Pairings</a></li>
+          <li><a href="#">Attorney Pairings</a></li>
+        </u1>
+      </nav>
+
+    </div> -->
+  </header-with-logo>
+
   <body>
     <div class="header">
-      <h1>LOGO GOES HERE</h1>
+      <!-- <h1>LOGO GOES HERE</h1> -->
+      <!-- <div id="top-header"> -->
+        <div class="logo">
+          <!-- <image src></image> -->
+          <image src="images/scij_logo.png" width="250px"></image>
+        </div>
+  
+        <div class="nav">
+          <ul>
+            <a class="active" href="#students">Student + Student</a></li>
+            <a href="#attorneys">Attorney + Students</a>
+          </ul>
+        </div>
+        <p></p>
+        <p></p>
+        <div class="div1">
+          <h1>Welcome to the SCIJ Pairing Tool</span></h1>
+        </div>
+  
+      <!-- </div> -->
     </div>
 
     <div class="parent">
 
-      <div class="div1">
-        <h3>Welcome to the SCIJ Pairing Tool</span></h3>
+      <div class="div2">
         <p>Et has minim elitr intellegat. Mea aeterno eleifend antiopam ad,
           nam no suscipit quaerendum. At nam minimum ponderum. Est audiam animal
           molestiae te. Ex duo eripuit mentitum.</p>
           <img src="image.png">
       </div>
 
-    <div class="div2">
-      <p>Upload your Google Form data and Criteria as Excel or CSV files here:</p>
+    <div class="div3">
+      <p>Upload your Google Form data as an Excel file here:</p>
       <form action="http:/localhost:5000/upload_data" method="post" enctype="multipart/form-data">
-        <label for="data">Data File:</label><br>
-        <input type="file" name="data" id="file1"><br><br>
-        <label for="headers">Headers File:</label><br>
-        <input type="file" name="headers" id="file2"><br><br>
+        <input type="file" name="file" id="file">
+        <p></p>
         <input type="submit" value="Submit">
       </form>
       <div class="next">
-        <button type="next">next</button>
+        <p></p>
+        <p></p>
+        <button type="next">Next</button>
       </div>
     </div>
 
-    <!-- <div class="div3">
+    <div class="div4">
       <h3>Upload criteria</span></h3>
       <p>Et has minim elitr intellegat. Mea aeterno eleifend antiopam ad,
         nam no suscipit quaerendum. At nam minimum ponderum. Est audiam animal
@@ -50,52 +84,56 @@
           <input type="submit" value="Submit">
         </form>
         <p></p>
-        <button type="button">Previous</button>
+        <button type="previous">Previous</button>
 
-    </div> -->
-
-    <div class="div4">
-      <div class="next">
-        <button type="next">next</button>
-      </div>
     </div>
 
     <div class="div5">
+      <div class="next">
+        <p></p>
+        <p></p>
+        <button type="next">Next</button>
+      </div>
+    </div>
+
+    <div class="div6">
       <h3>Here are the possible matches:</span></h3>
       <p>Et has minim elitr intellegat. Mea aeterno eleifend antiopam ad,
         nam no suscipit quaerendum. At nam minimum ponderum. Est audiam animal
         molestiae te. Ex duo eripuit mentitum.</p>
-        <button type="button">Export</button>
+        <button type="export">Export</button>
         <p></p>
 
-        <button type="button">Previous</button>
+        <button type="previous">Previous</button>
 
-    </div>
-
-    <div class="div6">
-      <img src="image.png">
-      <div class="image-button">
-        <button>next</button>
-      </div>
     </div>
 
     <div class="div7">
+      <img src="image.png">
+      <!-- <p></p>
+      <p></p>
+      <p></p> -->
+      <!-- <div class="image-button"> -->
+        
+      <button type="next" style="float: right;">Next</button>
+      <!-- </div> -->
+    </div>
+
+    <div class="div8">
       <h3>Here are the optimized pairings:</span></h3>
       <p>Et has minim elitr intellegat. Mea aeterno eleifend antiopam ad,
         nam no suscipit quaerendum. At nam minimum ponderum. Est audiam animal
         molestiae te. Ex duo eripuit mentitum.</p>
-        <button type="button">Export</button>
+        <button type="export">Export</button>
+        <p></p>
+        <button type="previous">Previous</button>
 
     </div>
 
-    <div class="div8">
+    <div class="div9">
     </div>
 
   </div>
-
-
-
-
 
   </body>
 </html>
