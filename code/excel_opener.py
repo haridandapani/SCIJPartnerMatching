@@ -220,17 +220,27 @@ def make_all_pairings(overlap_matrix, allnames, legal_dict, headers_dict):
         pairable_dict = make_pairable_dict(allnames, legal_dict)
         first_student = get_least_paired_student(pairable_dict)
         if first_student == None:
-            return final_pairings
+            return final_pairings, allnames
         
         second_student = make_pairings_for_student(first_student, pairable_dict, overlap_matrix, headers_dict)
         if second_student == None:
-            return final_pairings
+            return final_pairings, allnames
 
         final_pairings.append((first_student, second_student))
 
         allnames.remove(first_student)
         allnames.remove(second_student)
     
+
+def legal_dict_to_json_dict(legal_dict, allnames):
+    json_dict = dict()
+    
+    for n1 in allnames:
+        json_dict[n1] = dict()
+        for n2 in allnames:
+            json_dict[n1][n2] = legal_dict[(n1, n2)]
+
+    return json_dict
 
 def runner():
     # headers stuff
@@ -254,9 +264,26 @@ def runner():
     matrix, legal, allnames, legal_dict = compareAllStudents(allStudents, headers_dict, min_hours)
 
     # optimality stuff
-    optimal = make_all_pairings(matrix, allnames.copy(), legal_dict, headers_dict)
-    print(allnames)
+    json_dict = legal_dict_to_json_dict(legal_dict, allnames)
+    print(json_dict)
+    
+    optimal, unpaired = make_all_pairings(matrix, allnames.copy(), legal_dict, headers_dict)
+    print(unpaired)
     print(optimal)
+
+    final_dict = dict()
+    final_dict["optimal"] = list()
+
+    for pair in optimal:
+        p1, p2 = pair
+        current_dict = dict()
+        current_dict["person1"] = p1
+        current_dict["person2"] = p2
+        final_dict["optimal"].append(current_dict)
+
+    final_dict["unpaired"] = unpaired
+    final_dict["matrix"] = json_dict
+    print(final_dict)
 
 def makePairings(headers_dataframe, data_dataframe, min_hours):
     # extracting data
@@ -268,7 +295,25 @@ def makePairings(headers_dataframe, data_dataframe, min_hours):
     parser_dict = comparison.getParserDict()
     allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
     matrix, legal, allnames, legal_dict = compareAllStudents(allStudents, headers_dict, min_hours)
-    return matrix, legal, allnames, legal_dict
+
+    json_dict = legal_dict_to_json_dict(legal_dict, allnames)
+    optimal, unpaired = make_all_pairings(matrix, allnames.copy(), legal_dict, headers_dict)
+
+    final_dict = dict()
+    final_dict["optimal"] = list()
+
+    for pair in optimal:
+        p1, p2 = pair
+        current_dict = dict()
+        current_dict["person1"] = p1
+        current_dict["person2"] = p2
+        final_dict["optimal"].append(current_dict)
+
+    final_dict["unpaired"] = unpaired
+    final_dict["matrix"] = json_dict
+     
+    
+    return final_dict
     
 if __name__ == "__main__":
     runner()
