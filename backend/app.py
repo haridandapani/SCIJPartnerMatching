@@ -2,8 +2,6 @@ import os
 from flask import Flask, request, redirect, flash, url_for, render_template, current_app, send_from_directory, jsonify
 from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
-import pandas as pd
-import json
 
 from file_processing.uploads import is_allowed_file, file_to_dataframe
 from file_processing.excel_opener import makePairings
@@ -56,26 +54,10 @@ def upload_data():
 
     # headers don't need first row, need for data 
 
-    matrix, legal = makePairings(headers_df, data_df, MIN_HOURS)
+    final_dict = makePairings(headers_df, data_df, MIN_HOURS)
     # print(legal)
     # return render_template('simple.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
-    test = {
-        "Sabrina Mendez": {
-            "Sabrina Mendez": 0, 
-            "Madelyn Lu": -1, 
-            "Billy-Joe Ramirez": 1
-        }, 
-        "Madelyn Lu": {
-            "Sabrina Mendez": -1, 
-            "Madelyn Lu": 0, 
-            "Billy-Joe Ramirez": 1
-        }, 
-        "Billy-Joe Ramirez": {
-            "Sabrina Mendez": 1, 
-            "Madelyn Lu": 1, 
-            "Billy-Joe Ramirez": 0
-        }
-    }
+    test = final_dict['matrix'] # also has 'unpaired' and 'optimal': [{'person1': steven, 'person2': hari}, ...]
 
 
     return test
