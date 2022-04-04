@@ -5,7 +5,7 @@ from flask_cors import CORS, cross_origin
 from file_processing.uploads import is_allowed_file, file_to_dataframe
 from file_processing.excel_opener import makePairings
 
-from utils.constants import UPLOAD_FOLDER, MIN_HOURS
+from utils.constants import UPLOAD_FOLDER, MIN_HOURS, UPLOAD_FILE
 
 app = Flask(__name__, template_folder='templates')
 cors = CORS(app)
@@ -43,11 +43,43 @@ def upload_data():
     return test
 
 @app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
-def download(filename): 
+@cross_origin()
+def download_specific_file_path(filename): 
     # set this up as a route
     # url_for("download_file", name=name) generates download url
     uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
     return send_from_directory(directory=uploads, path=filename)
+
+@app.route('/download', methods=['POST'])
+@cross_origin()
+def download(): 
+    data_file = request.files['data']
+    headers_file = request.files['headers']
+
+    # If the user does not select a file, the browser submits an
+    # empty file without a filename.
+    if not data_file or not is_allowed_file(data_file.filename) or not is_allowed_file(headers_file.filename):
+        flash('Invalid File')
+        flash(data_file)
+        flash(headers_file)
+        return redirect(request.url)
+
+    data_df = file_to_dataframe(data_file)
+    headers_df = file_to_dataframe(headers_file, True)
+
+    if data_df is None or headers_df is None: 
+        flash('Error parsing file')
+        return redirect(request.url) 
+
+    final_dict = makePairings(headers_df, data_df, MIN_HOURS)
+    test = final_dict['matrix'] # also has 'unpaired' and 'optimal': [{'person1': steven, 'person2': hari}, ...]
+
+    # TODO: code to write test into excel 
+
+    # set this up as a route
+    # url_for("download_file", name=name) generates download url
+    uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
+    return send_from_directory(directory=uploads, filename=UPLOAD_FILE, as_attachment=True)
 
 if __name__ == '__main__': 
     app.secret_key = 'super secret key'

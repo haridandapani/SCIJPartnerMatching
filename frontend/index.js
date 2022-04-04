@@ -46,18 +46,43 @@ async function fetchData() {
     data.append('data', file1)
     data.append('headers', file2)
 
+    const returnDownloadLink = document.getElementById('excelCheck').checked
 
-    fetch("http:/localhost:5000/upload_data", {
-        method: "POST",     
-        body: data
-    })
-    .then(response => response.json())
-    .then(data => {
-        createMatrix(data)
-    })
-    .catch(err => {
-        console.log(err)
-    })
+    if (returnDownloadLink) {
+        fetch("http:/localhost:5000/download", {
+            method: "POST", 
+            body: data
+        })
+        .then(response => {
+            return response.blob()
+        })
+        .then(blob => {
+            // Create hidden link element to download, click & delete link
+            var a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = "legal_pairings.xlsx";
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    } else {
+        fetch("http:/localhost:5000/upload_data", {
+            method: "POST",     
+            body: data
+        })
+        .then(response => response.json())
+        .then(data => {
+            createMatrix(data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
 }
 
 /*
