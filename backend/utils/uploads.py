@@ -18,13 +18,3 @@ def file_to_dataframe(file):
         return pd.read_excel(file, engine='openpyxl')
     else: 
         return None  
-
-def preprocess(location, is_link=False): 
-    if is_link: 
-        # TODO: google api stuff
-        pass 
-    else: 
-        # TODO: pandas stuff 
-        pass 
-    
-    return None

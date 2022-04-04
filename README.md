@@ -11,3 +11,5 @@ To make the virtual env:
     - python3 -m venv venv
     - pip3 install -r requirements.txt
     - source venv/bin/activate
+
+Tested to work on python3.8. 

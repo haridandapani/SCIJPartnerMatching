@@ -13,7 +13,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['TESTING'] = True 
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route('/upload_data', methods=['POST', 'GET'])
+'''
+Endpoint for displaying legal pairings directly in frontend. 
+'''
+@app.route('/upload_data', methods=['POST'])
 @cross_origin()
 def upload_data():
     '''
@@ -42,14 +45,10 @@ def upload_data():
 
     return test
 
-@app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
-@cross_origin()
-def download_specific_file_path(filename): 
-    # set this up as a route
-    # url_for("download_file", name=name) generates download url
-    uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
-    return send_from_directory(directory=uploads, path=filename)
-
+''' 
+Endpoint for excel format download. Assumes legal pairings are saved at 
+UPLOAD_FOLDER/UPLOAD_FILE (currently data/xlsx_example.xlsx). 
+'''
 @app.route('/download', methods=['POST'])
 @cross_origin()
 def download(): 
@@ -80,6 +79,17 @@ def download():
     # url_for("download_file", name=name) generates download url
     uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
     return send_from_directory(directory=uploads, filename=UPLOAD_FILE, as_attachment=True)
+
+'''
+Unused endpoint for excel download. Use if we want frontend to specify file loc
+'''
+@app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
+@cross_origin()
+def download_specific_file_path(filename): 
+    # set this up as a route
+    # url_for("download_file", name=name) generates download url
+    uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
+    return send_from_directory(directory=uploads, path=filename)
 
 if __name__ == '__main__': 
     app.secret_key = 'super secret key'
