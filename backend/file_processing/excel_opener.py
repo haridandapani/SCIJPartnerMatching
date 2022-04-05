@@ -1,6 +1,7 @@
 import pandas as pd # pip3 install pandas
 import openpyxl # pip3 install openpyxl
-import file_processing.comparison as comparison
+#import file_processing.comparison as comparison
+import comparison
 
 class Header:
     def __init__(self, header, datatype, necessary):
@@ -76,7 +77,6 @@ def compareStudents(student_one, student_two, headers):
             s2attribute = student_two.attributes[this_header.header]
             comp = this_comparator(s1attribute, s2attribute)
             overlap[this_header.header] = comp
-    #print(overlap)
     return overlap
 
 
@@ -88,6 +88,12 @@ def isLegal(overlap, headers, min_hours):
             total_hours += overlap[key]
         elif (this_header.datatype == "similar_category_one" or this_header.datatype == "different_category_one") and this_header.necessary:
             if not overlap[key]:
+                return False
+        elif this_header.datatype == "similar_number" and this_header.necessary:
+            if overlap[key] != 0:
+                return False
+        elif this_header.datatype == "different_number" and this_header.necessary:
+            if overlap[key] == 0:
                 return False
             
     return total_hours >= min_hours
@@ -159,6 +165,31 @@ def get_least_paired_matchable_students(student_list, pairable_dict):
             possible_students.append(student)
 
     return possible_students
+
+def compare_optional(student_to_pair, possible_pairings, overlap_matrix, headers):
+    possible_students = list()
+    max_num_shared = 0
+
+    for student in possible_pairings:
+        overlap = overlap_matrix[(student_to_pair, student)]
+        num_shared = 0
+        for key in overlap:
+            this_header = headers[key]
+            if not this_header.necessary:
+                if this_header.datatype == "similar_category_one" or this_header.datatype == "different_category_one" and overlap[key]:
+                    num_shared +=1
+                elif this_header.datatype == "similar_number" and overlap[key] == 0:
+                    num_shared +=1
+                elif this_header.datatype == "different_number" and overlap[key] != 0:
+                    num_shared +=1
+
+        if num_shared > max_num_shared:
+            possible_students = list()
+            possible_students.append(student)
+        elif num_shared == max_num_shared:
+            possible_students.append(student)
+
+    return possible_students
     
 
 def get_most_hours(student_to_pair, possible_pairings, overlap_matrix, headers):
@@ -195,10 +226,16 @@ def make_pairings_for_student(student_to_pair, pairable_dict, overlap_matrix, he
     if len(possible_pairings) == 1:
         return possible_pairings[0]
 
-    possible_pairings = get_most_hours(student_to_pair, possible_pairings, overlap_matrix, headers)
+    possible_pairings = compare_optional(student_to_pair, possible_pairings, overlap_matrix, headers)
     if len(possible_pairings) == 0:
         return None
     if len(possible_pairings) == 1:
+        return possible_pairings[0]
+
+    possible_pairings = get_most_hours(student_to_pair, possible_pairings, overlap_matrix, headers)
+    if len(possible_pairings) == 0:
+        return None
+    else:
         return possible_pairings[0]
 
 def make_pairable_dict(allnames, legal_dict):
@@ -244,14 +281,14 @@ def legal_dict_to_json_dict(legal_dict, allnames):
 
 def runner():
     # headers stuff
-    dataframe = excel_to_df("../data/SCIJ_MOCK_HEADERS.xlsx") # excel_to_df("../data/mock_headers.xlsx")
+    dataframe = excel_to_df("../../data/SCIJ_MOCK_HEADERS.xlsx") # excel_to_df("../data/mock_headers.xlsx")
     values = read_excel_file(dataframe)
     headers_dict = convertDataframeValuesToHeaders(values)
     #print(headers_dict)
     #print("===============================")
 
     # data stuff
-    data_values = read_excel_file(excel_to_generic_df("../data/SCIJ_MOCK.xlsx")) # read_excel_file(excel_to_generic_df("../data/simple_data.xlsx"))
+    data_values = read_excel_file(excel_to_generic_df("../../data/SCIJ_MOCK.xlsx")) # read_excel_file(excel_to_generic_df("../data/simple_data.xlsx"))
     column_dict = getHeadersIndices(data_values)
     min_hours = 3
     #print(column_dict)

@@ -1,3 +1,8 @@
+def processNumber(numberString):
+    for s in numberString.split():
+        if s.isdigit():
+            return int(s)
+
 def generateName(name):
     return name
 
@@ -22,9 +27,12 @@ def compareCategoryOne(similar : bool):
     else:
         return lambda cat_1, cat_2: cat_1 != cat_2
 
+def compareNumbers(num1, num2):
+    return math.abs(num1 - num2)
+
 def getParserDict():
     parser_dict = {"hours": generateListFromHours, "similar_category_one": generateCategoryFromCategoryOne, "name": generateName,
-                   "different_category_one": generateCategoryFromCategoryOne}
+                   "different_category_one": generateCategoryFromCategoryOne, "similar_number": processNumber, "different_number": processNumber}
     return parser_dict
 
 def getComparators():
