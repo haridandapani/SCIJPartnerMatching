@@ -78,7 +78,7 @@ def download():
     # set this up as a route
     # url_for("download_file", name=name) generates download url
     uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
-    return send_from_directory(directory=uploads, filename=UPLOAD_FILE, as_attachment=True)
+    return send_from_directory(directory=uploads, path=UPLOAD_FILE, as_attachment=True)
 
 '''
 Unused endpoint for excel download. Use if we want frontend to specify file loc
