@@ -40,7 +40,7 @@ def upload_data():
         flash('Error parsing file')
         return redirect(request.url) 
 
-    final_dict = makePairings(headers_df, data_df, MIN_HOURS)
+    final_dict = makePairings(headers_df, data_df, int(request.form['minHours']))
     return final_dict # also has 'unpaired' and 'optimal': [{'person1': steven, 'person2': hari}, ...]
 
 ''' 
@@ -68,7 +68,7 @@ def download():
         flash('Error parsing file')
         return redirect(request.url) 
 
-    final_dict = makePairings(headers_df, data_df, MIN_HOURS)
+    final_dict = makePairings(headers_df, data_df, int(request.form['minHours']))
     test = final_dict['matrix'] # also has 'unpaired' and 'optimal': [{'person1': steven, 'person2': hari}, ...]
 
     # TODO: code to write test into excel 

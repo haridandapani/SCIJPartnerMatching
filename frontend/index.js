@@ -80,10 +80,12 @@ function createUnpaired(data) {
 async function fetchData() {
     const file1 = document.getElementById('file1').files[0]
     const file2 = document.getElementById('file2').files[0]
-
+    const minHours = document.getElementById("minHours").value
+    
     var data = new FormData(form)
     data.append('data', file1)
     data.append('headers', file2)
+    data.append("minHours", minHours)
 
     const returnDownloadLink = document.getElementById('excelCheck').checked
     
@@ -130,7 +132,17 @@ async function fetchData() {
     Clears the current matrix
 */
 function cleanup() {
-    const parent = document.getElementById("matrixContainer") // Gets container to insert into 
+    let parent = document.getElementById("matrixContainer") // Gets container to insert into 
+    while (parent.firstChild) {
+        parent.firstChild.remove()
+    }
+
+    parent = document.getElementById("optimalList") // Gets container to insert into 
+    while (parent.firstChild) {
+        parent.firstChild.remove()
+    }
+
+    parent = document.getElementById("unpairedList") // Gets container to insert into 
     while (parent.firstChild) {
         parent.firstChild.remove()
     }
@@ -144,7 +156,9 @@ function matrixMagnify() {
     
     // Increase sides by 4% of screen height
     for (c of cells) {
-        const newLength = parseInt(c.offsetHeight + screen.height *0.04) + "px"
+        const length = parseInt(c.offsetHeight + screen.height *0.04)
+        const newLength = length + "px"
+        c.style.fontSize = parseInt(length / 2)
         c.style.height = newLength
         c.style.width = c.style.height
     }
@@ -158,7 +172,9 @@ function matrixShrink() {
 
     // Decrease sides by 4% of screen height 
     for (c of cells) {
-        const newLength = parseInt(c.offsetHeight - screen.height *0.04) + "px"
+        const length = parseInt(c.offsetHeight - screen.height *0.04)
+        const newLength = length + "px"
+        c.style.fontSize = parseInt(length / 2)
         c.style.height = newLength
         c.style.width = c.style.height
     }
