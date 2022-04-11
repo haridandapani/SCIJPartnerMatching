@@ -5,14 +5,20 @@ const form = document.getElementById("fileUpload")
 */
 function createChild(name1, name2, s) {
     let pair = document.createElement("div")
+    pair.className = "matrixCell"
     let name = document.createElement("p")
-    let score = document.createElement("p")
 
     name.textContent = name1 + ", " + name2 
-    score.textContent = s
+
+    if (s < 0) {
+        pair.style.background = "#ab354d"
+    } else if (s == 0) {
+        pair.style.background = "#7d7d7d"
+    } else {
+        pair.style.background = "#49d184"
+    }
     
     pair.appendChild(name)
-    pair.appendChild(score)
     
     return pair
 }
@@ -23,10 +29,11 @@ function createChild(name1, name2, s) {
 function createMatrix(data) {
     // JSON FORMAT: {p1: {p1: score, ... pn: score}, ..., pn: {p1: score, ... pn: score}}
 
-    const container = document.getElementById("pairContainer") // Gets container to insert into 
+    const container = document.getElementById("matrixContainer") // Gets container to insert into 
 
     for (var p1 in data) {
         let person = document.createElement("div") // Row for the person
+        person.className = "matrixRow"
         for (var p2 in data[p1]) {
             pair = createChild(p1, p2, data[p1][p2])
             person.appendChild(pair)
@@ -89,9 +96,27 @@ async function fetchData() {
     Clears the current matrix
 */
 function cleanup() {
-    const parent = document.getElementById("pairContainer") // Gets container to insert into 
+    const parent = document.getElementById("matrixContainer") // Gets container to insert into 
     while (parent.firstChild) {
         parent.firstChild.remove()
+    }
+}
+
+function matrixMagnify() {
+    let cells = document.getElementsByClassName("matrixCell")
+    for (c of cells) {
+        const newLength = parseInt(c.offsetHeight + screen.height *0.04) + "px"
+        c.style.height = newLength
+        c.style.width = c.style.height
+    }
+}
+
+function matrixShrink() {
+    let cells = document.getElementsByClassName("matrixCell")
+    for (c of cells) {
+        const newLength = parseInt(c.offsetHeight - screen.height *0.04) + "px"
+        c.style.height = newLength
+        c.style.width = c.style.height
     }
 }
 
@@ -101,3 +126,6 @@ form.onsubmit = function(event) {
     fetchData()
     return false
 }
+
+document.getElementById("matrixMagnify").addEventListener("click", matrixMagnify);
+document.getElementById("matrixShrink").addEventListener("click", matrixShrink);
