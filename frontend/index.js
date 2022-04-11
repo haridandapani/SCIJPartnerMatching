@@ -4,12 +4,14 @@ const form = document.getElementById("fileUpload")
     Creates a div representing a 2 student pair
 */
 function createChild(name1, name2, s) {
+    // Div for one cell in matrix. This is a single box in the matrix 
     let pair = document.createElement("div")
     pair.className = "matrixCell"
-    let name = document.createElement("p")
 
+    let name = document.createElement("p")
     name.textContent = name1 + ", " + name2 
 
+    // Red if score < 0, grey if score == 0, green if score > 0
     if (s < 0) {
         pair.style.background = "#ab354d"
     } else if (s == 0) {
@@ -18,6 +20,7 @@ function createChild(name1, name2, s) {
         pair.style.background = "#49d184"
     }
     
+    // Add names to pair div 
     pair.appendChild(name)
     
     return pair
@@ -42,6 +45,35 @@ function createMatrix(data) {
     }
 }
 
+/*
+    Takes in response json, puts optimal pairings on the website
+*/
+function createOptimal(data) {
+    // JSON FORMAT: [{'person1': ..., 'person2': ...}, {...}]
+
+    const container = document.getElementById("optimalList") // Gets container to insert into 
+
+    for (var pair of data) {
+        let person = document.createElement("li") // Row for the person
+        person.textContent = pair["person1"] + ", " + pair["person2"]
+        container.appendChild(person)
+    }
+}
+
+/*
+    Takes in response json, puts optimal pairings on the website
+*/
+function createUnpaired(data) {
+    // JSON FORMAT: ["<name1>", "<name2>", ...]
+    const container = document.getElementById("unpairedList") // Gets container to insert into 
+
+    for (var name of data) {
+        let person = document.createElement("li") // Row for the person
+        person.textContent = name
+        container.appendChild(person)
+    }
+}
+
 /* 
     Submits student data and matching headers, receives json response and creates matrix
 */
@@ -54,8 +86,8 @@ async function fetchData() {
     data.append('headers', file2)
 
     const returnDownloadLink = document.getElementById('excelCheck').checked
-
-    if (returnDownloadLink) {
+    
+    if (returnDownloadLink) { // Excel download case 
         fetch("http:/localhost:5000/download", {
             method: "POST", 
             body: data
@@ -77,14 +109,16 @@ async function fetchData() {
         .catch(err => {
             console.log(err)
         })
-    } else {
+    } else { // Create matrix directly on website 
         fetch("http:/localhost:5000/upload_data", {
             method: "POST",     
             body: data
         })
         .then(response => response.json())
         .then(data => {
-            createMatrix(data)
+            createMatrix(data.matrix)
+            createOptimal(data.optimal)
+            createUnpaired(data.unpaired)
         })
         .catch(err => {
             console.log(err)
@@ -102,8 +136,13 @@ function cleanup() {
     }
 }
 
+/*
+    Handles zooming in on matrix resizing 
+*/
 function matrixMagnify() {
     let cells = document.getElementsByClassName("matrixCell")
+    
+    // Increase sides by 4% of screen height
     for (c of cells) {
         const newLength = parseInt(c.offsetHeight + screen.height *0.04) + "px"
         c.style.height = newLength
@@ -111,8 +150,13 @@ function matrixMagnify() {
     }
 }
 
+/*
+    Handles zooming out on matrix resizing
+*/
 function matrixShrink() {
     let cells = document.getElementsByClassName("matrixCell")
+
+    // Decrease sides by 4% of screen height 
     for (c of cells) {
         const newLength = parseInt(c.offsetHeight - screen.height *0.04) + "px"
         c.style.height = newLength
@@ -120,6 +164,7 @@ function matrixShrink() {
     }
 }
 
+// Form submit event handler 
 form.onsubmit = function(event) {
     event.preventDefault()
     cleanup()
@@ -127,5 +172,6 @@ form.onsubmit = function(event) {
     return false
 }
 
+// Zoom button click event handlers 
 document.getElementById("matrixMagnify").addEventListener("click", matrixMagnify);
 document.getElementById("matrixShrink").addEventListener("click", matrixShrink);
