@@ -86,7 +86,6 @@ ul {
 .parent {
 display: grid;
 grid-template-columns: repeat(2, 1fr);
-grid-template-rows: repeat(4, 1fr);
 grid-column-gap: 0px;
 grid-row-gap: 0px;
 max-width: 90%;
@@ -186,6 +185,83 @@ input[type="submit" i] {
   border-radius: 12px;
 }
 
+/* CSS to style matrix */
+.matrixButton {
+    height: 5vh; 
+    width: 5vh; 
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+.matrixButton:hover {
+    background: #335683;
+}
+
+.matrixCell {
+    height: 10vh;
+    width: 10vh;
+    min-width: 7vh;
+    min-height: 7vh;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+    border-radius: 5px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border: 1px black; 
+}
+
+.matrixCell:hover {
+    transform: scale(1.2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.matrixRow {
+    margin: auto;
+    display: flex; 
+    justify-content: center;
+}
+
+.matrixControls {
+    display: flex; 
+    flex-direction: row; 
+    justify-content: center;
+}
+
+.matrixContainer {
+    margin: auto;
+    display: flex; 
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 90vh;
+    width: 90vw;
+    overflow-y: auto;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: 3vh; 
+    padding-top: 3vh; 
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    border-radius: 25px;
+}
+
+.matrixContainer::-webkit-scrollbar {
+    width: 20px;
+}
+.matrixContainer::-webkit-scrollbar-track {
+    background-color: #e4e4e4;
+    border-radius: 100px;
+}
+
+.matrixContainer::-webkit-scrollbar-thumb {
+border-radius: 100px;
+border: 6px solid rgba(0, 0, 0, 0.18);
+border-left: 0;
+border-right: 0;
+background-color: #1f3552;
+}
+
+
+
 /* CSS to style slider for excel download selection */
 .switch {
   position: relative;
@@ -245,3 +321,4 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
