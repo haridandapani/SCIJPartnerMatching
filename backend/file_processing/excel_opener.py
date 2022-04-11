@@ -270,13 +270,12 @@ def make_all_pairings(overlap_matrix, allnames, legal_dict, headers_dict):
         
         second_student = make_pairings_for_student(first_student, pairable_dict, overlap_matrix, headers_dict)
         if second_student == None:
-            allnames.remove(first_student)
             unpaired.append(first_student)
-
-        final_pairings.append((first_student, second_student))
-
-        allnames.remove(first_student)
-        allnames.remove(second_student)
+            allnames.remove(first_student)
+        else:
+            final_pairings.append((first_student, second_student))
+            allnames.remove(first_student)
+            allnames.remove(second_student)
     return final_pairings, unpaired
     
 
@@ -332,8 +331,6 @@ def runner():
     #print("===============================")
     
     matrix, legal, allnames, legal_dict = compareAllStudents(allStudents, headers_dict, min_hours)
-
-    
     
     json_dict = legal_dict_to_json_dict(legal_dict, allnames)
     print(json_dict)
@@ -376,9 +373,13 @@ def makePairings(headers_dataframe, data_dataframe, min_hours):
     parser_dict = comparison.getParserDict()
     allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
     matrix, legal, allnames, legal_dict = compareAllStudents(allStudents, headers_dict, min_hours)
-
     json_dict = legal_dict_to_json_dict(legal_dict, allnames)
-    optimal, unpaired = make_all_pairings(matrix, allnames.copy(), legal_dict, headers_dict)
+
+    
+    students_to_exclude = exclude_students(allnames, allStudents, headers_dict)
+    paiarable_students = allnames.copy()
+    paiarable_students = [x for x in paiarable_students if x not in students_to_exclude]
+    optimal, unpaired = make_all_pairings(matrix, paiarable_students, legal_dict, headers_dict)
 
     final_dict = dict()
     final_dict["optimal"] = list()
@@ -392,8 +393,7 @@ def makePairings(headers_dataframe, data_dataframe, min_hours):
 
     final_dict["unpaired"] = unpaired
     final_dict["matrix"] = json_dict
-     
-    
+         
     return final_dict
     
 if __name__ == "__main__":

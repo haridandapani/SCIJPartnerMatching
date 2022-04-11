@@ -1,4 +1,5 @@
 def processNumber(numberString):
+    numberString = str(numberString)
     for s in numberString.split():
         if s.isdigit():
             return int(s)
@@ -28,7 +29,7 @@ def compareCategoryOne(similar : bool):
         return lambda cat_1, cat_2: cat_1 != cat_2
 
 def compareNumbers(num1, num2):
-    return math.abs(num1 - num2)
+    return abs(num1 - num2)
 
 def getParserDict():
     parser_dict = {"hours": generateListFromHours, "similar_category_one": generateCategoryFromCategoryOne, "name": generateName,
