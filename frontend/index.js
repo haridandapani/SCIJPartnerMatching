@@ -4,15 +4,24 @@ const form = document.getElementById("fileUpload")
     Creates a div representing a 2 student pair
 */
 function createChild(name1, name2, s) {
+    // Div for one cell in matrix. This is a single box in the matrix 
     let pair = document.createElement("div")
-    let name = document.createElement("p")
-    let score = document.createElement("p")
+    pair.className = "matrixCell"
 
+    let name = document.createElement("p")
     name.textContent = name1 + ", " + name2 
-    score.textContent = s
+
+    // Red if score < 0, grey if score == 0, green if score > 0
+    if (s < 0) {
+        pair.style.background = "#ab354d"
+    } else if (s == 0) {
+        pair.style.background = "#7d7d7d"
+    } else {
+        pair.style.background = "#49d184"
+    }
     
+    // Add names to pair div 
     pair.appendChild(name)
-    pair.appendChild(score)
     
     return pair
 }
@@ -23,14 +32,44 @@ function createChild(name1, name2, s) {
 function createMatrix(data) {
     // JSON FORMAT: {p1: {p1: score, ... pn: score}, ..., pn: {p1: score, ... pn: score}}
 
-    const container = document.getElementById("pairContainer") // Gets container to insert into 
+    const container = document.getElementById("matrixContainer") // Gets container to insert into 
 
     for (var p1 in data) {
         let person = document.createElement("div") // Row for the person
+        person.className = "matrixRow"
         for (var p2 in data[p1]) {
             pair = createChild(p1, p2, data[p1][p2])
             person.appendChild(pair)
         }
+        container.appendChild(person)
+    }
+}
+
+/*
+    Takes in response json, puts optimal pairings on the website
+*/
+function createOptimal(data) {
+    // JSON FORMAT: [{'person1': ..., 'person2': ...}, {...}]
+
+    const container = document.getElementById("optimalList") // Gets container to insert into 
+
+    for (var pair of data) {
+        let person = document.createElement("li") // Row for the person
+        person.textContent = pair["person1"] + ", " + pair["person2"]
+        container.appendChild(person)
+    }
+}
+
+/*
+    Takes in response json, puts optimal pairings on the website
+*/
+function createUnpaired(data) {
+    // JSON FORMAT: ["<name1>", "<name2>", ...]
+    const container = document.getElementById("unpairedList") // Gets container to insert into 
+
+    for (var name of data) {
+        let person = document.createElement("li") // Row for the person
+        person.textContent = name
         container.appendChild(person)
     }
 }
@@ -47,8 +86,8 @@ async function fetchData() {
     data.append('headers', file2)
 
     const returnDownloadLink = document.getElementById('excelCheck').checked
-
-    if (returnDownloadLink) {
+    
+    if (returnDownloadLink) { // Excel download case 
         fetch("http:/localhost:5000/download", {
             method: "POST", 
             body: data
@@ -70,14 +109,16 @@ async function fetchData() {
         .catch(err => {
             console.log(err)
         })
-    } else {
+    } else { // Create matrix directly on website 
         fetch("http:/localhost:5000/upload_data", {
             method: "POST",     
             body: data
         })
         .then(response => response.json())
         .then(data => {
-            createMatrix(data)
+            createMatrix(data.matrix)
+            createOptimal(data.optimal)
+            createUnpaired(data.unpaired)
         })
         .catch(err => {
             console.log(err)
@@ -89,15 +130,48 @@ async function fetchData() {
     Clears the current matrix
 */
 function cleanup() {
-    const parent = document.getElementById("pairContainer") // Gets container to insert into 
+    const parent = document.getElementById("matrixContainer") // Gets container to insert into 
     while (parent.firstChild) {
         parent.firstChild.remove()
     }
 }
 
+/*
+    Handles zooming in on matrix resizing 
+*/
+function matrixMagnify() {
+    let cells = document.getElementsByClassName("matrixCell")
+    
+    // Increase sides by 4% of screen height
+    for (c of cells) {
+        const newLength = parseInt(c.offsetHeight + screen.height *0.04) + "px"
+        c.style.height = newLength
+        c.style.width = c.style.height
+    }
+}
+
+/*
+    Handles zooming out on matrix resizing
+*/
+function matrixShrink() {
+    let cells = document.getElementsByClassName("matrixCell")
+
+    // Decrease sides by 4% of screen height 
+    for (c of cells) {
+        const newLength = parseInt(c.offsetHeight - screen.height *0.04) + "px"
+        c.style.height = newLength
+        c.style.width = c.style.height
+    }
+}
+
+// Form submit event handler 
 form.onsubmit = function(event) {
     event.preventDefault()
     cleanup()
     fetchData()
     return false
 }
+
+// Zoom button click event handlers 
+document.getElementById("matrixMagnify").addEventListener("click", matrixMagnify);
+document.getElementById("matrixShrink").addEventListener("click", matrixShrink);

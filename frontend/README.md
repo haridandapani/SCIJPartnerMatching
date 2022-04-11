@@ -1,1 +1,1 @@
-Frontend for SCIJ pairing platform. Currently tested to work on Chrome, does not work on Opera. To run, open home.html and start the backend server. 
+Frontend for SCIJ pairing platform. To run, open home.html and start the backend server. 
