@@ -1,12 +1,17 @@
 import pandas as pd # pip3 install pandas
 import openpyxl # pip3 install openpyxl
-import file_processing.comparison as comparison
-#import comparison
+#import file_processing.comparison as comparison
+import comparison
 
 class Header:
     def __init__(self, header, datatype, necessary):
         self.header = header
-        self.datatype = datatype
+        if "exclude_if" in datatype:
+            self.datatype = "exclude_if"
+            self.parameter = "".join(datatype.split("\"")[1:])
+        else:
+            self.datatype = datatype
+        
         self.necessary = (necessary == 1)
     def __str__(self):
         return self.header +", " + self.datatype +", "+str(self.necessary)
@@ -98,13 +103,17 @@ def isLegal(overlap, headers, min_hours):
             
     return total_hours >= min_hours
 
-
-def compareAllStudents(allStudents, headers, min_hours):
-    name = ""
+def getNameHeader(headers):
+    name = None
     for header_keys in headers:
         if headers[header_keys].datatype == "name":
             name = headers[header_keys].header
+    return name
 
+
+def compareAllStudents(allStudents, headers, min_hours):
+
+    name = getNameHeader(headers)
     allnames = list()
     legal = list()
     matrix = dict()
@@ -251,22 +260,24 @@ def make_pairable_dict(allnames, legal_dict):
 
 def make_all_pairings(overlap_matrix, allnames, legal_dict, headers_dict):
     final_pairings = list()
-    finished_pairing = False
+    unpaired = list()
 
-    while True:
+    while len(allnames) > 0:
         pairable_dict = make_pairable_dict(allnames, legal_dict)
         first_student = get_least_paired_student(pairable_dict)
         if first_student == None:
-            return final_pairings, allnames
+            return final_pairings, unpaired
         
         second_student = make_pairings_for_student(first_student, pairable_dict, overlap_matrix, headers_dict)
         if second_student == None:
-            return final_pairings, allnames
+            allnames.remove(first_student)
+            unpaired.append(first_student)
 
         final_pairings.append((first_student, second_student))
 
         allnames.remove(first_student)
         allnames.remove(second_student)
+    return final_pairings, unpaired
     
 
 def legal_dict_to_json_dict(legal_dict, allnames):
@@ -279,9 +290,31 @@ def legal_dict_to_json_dict(legal_dict, allnames):
 
     return json_dict
 
+def getExclusionHeaders(headers_dict):
+    excludsion_headers = list()
+    for header in headers_dict:
+        if headers_dict[header].datatype == "exclude_if":
+            excludsion_headers.append(header)
+    return excludsion_headers
+
+def exclude_students(allnames, allStudents, headers_dict):
+    excludeable = list()
+    name = getNameHeader(headers_dict)
+    excludsion_headers = getExclusionHeaders(headers_dict)
+    
+    for i in range(0, len(allStudents)):
+        for header in excludsion_headers:
+            parameter = headers_dict[header].parameter
+            if allStudents[i].attributes[header] == parameter:
+                student_name = allStudents[i].attributes[name]
+                excludeable.append(student_name)
+    return excludeable
+        
+    
+
 def runner():
     # headers stuff
-    dataframe = excel_to_df("../../data/SCIJ_MOCK_HEADERS.xlsx") # excel_to_df("../data/mock_headers.xlsx")
+    dataframe = excel_to_df("../../data/SCIJ_MOCK_HEADERS_EXCLUDE.xlsx") # excel_to_df("../data/mock_headers.xlsx")
     values = read_excel_file(dataframe)
     headers_dict = convertDataframeValuesToHeaders(values)
     #print(headers_dict)
@@ -300,14 +333,24 @@ def runner():
     
     matrix, legal, allnames, legal_dict = compareAllStudents(allStudents, headers_dict, min_hours)
 
-    # optimality stuff
+    
+    
     json_dict = legal_dict_to_json_dict(legal_dict, allnames)
     print(json_dict)
+
+    # optimality stuff
+
+    # exclusion
+    students_to_exclude = exclude_students(allnames, allStudents, headers_dict)
+    print(students_to_exclude)
+    paiarable_students = allnames.copy()
+    paiarable_students = [x for x in paiarable_students if x not in students_to_exclude]
     
-    optimal, unpaired = make_all_pairings(matrix, allnames.copy(), legal_dict, headers_dict)
+    print(paiarable_students)
+    optimal, unpaired = make_all_pairings(matrix, paiarable_students, legal_dict, headers_dict)
     print(unpaired)
     print(optimal)
-
+    unpaired.extend(students_to_exclude)
     final_dict = dict()
     final_dict["optimal"] = list()
 
@@ -321,6 +364,7 @@ def runner():
     final_dict["unpaired"] = unpaired
     final_dict["matrix"] = json_dict
     print(final_dict)
+    return final_dict
 
 def makePairings(headers_dataframe, data_dataframe, min_hours):
     # extracting data

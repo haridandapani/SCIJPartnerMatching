@@ -32,11 +32,13 @@ def compareNumbers(num1, num2):
 
 def getParserDict():
     parser_dict = {"hours": generateListFromHours, "similar_category_one": generateCategoryFromCategoryOne, "name": generateName,
-                   "different_category_one": generateCategoryFromCategoryOne, "similar_number": processNumber, "different_number": processNumber}
+                   "different_category_one": generateCategoryFromCategoryOne, "similar_number": processNumber, "different_number": processNumber,
+                   "exclude_if": generateName}
     return parser_dict
 
 def getComparators():
-    compare_dict = {"hours": compareHours, "similar_category_one": compareCategoryOne(True), "different_category_one": compareCategoryOne(False)}
+    compare_dict = {"hours": compareHours, "similar_category_one": compareCategoryOne(True), "different_category_one": compareCategoryOne(False),
+                    "similar_number": compareNumbers, "different_number": compareNumbers}
     return compare_dict
 
 def runner():
