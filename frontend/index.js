@@ -191,3 +191,62 @@ form.onsubmit = function(event) {
 // Zoom button click event handlers 
 document.getElementById("matrixMagnify").addEventListener("click", matrixMagnify);
 document.getElementById("matrixShrink").addEventListener("click", matrixShrink);
+
+/* Adds drag scrolling for the matrix ========================================*/
+const ele = document.getElementById("matrixWindow")
+ele.style.cursor = 'grab';
+let pos = { top: 0, left: 0, x: 0, y: 0 };
+const mouseDownHandler = function (e) {
+    ele.style.cursor = 'grabbing';
+    ele.style.userSelect = 'none';
+
+    pos = {
+        left: ele.scrollLeft,
+        top: ele.scrollTop,
+        // Get the current mouse position
+        x: e.clientX,
+        y: e.clientY,
+    };
+
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+};
+
+const mouseMoveHandler = function (e) {
+    // How far the mouse has been moved
+    const dx = e.clientX - pos.x;
+    const dy = e.clientY - pos.y;
+
+    // Scroll the element
+    ele.scrollTop = pos.top - dy;
+    ele.scrollLeft = pos.left - dx;
+};
+
+const mouseUpHandler = function () {
+    ele.style.cursor = 'grab';
+    ele.style.removeProperty('user-select');
+
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+};
+
+// Attach the handler
+ele.addEventListener('mousedown', mouseDownHandler);
+/* ========================================================================== */
+
+/* ========================================================================== */
+/* 
+https://developer.mozilla.org/en-US/docs/Web/API/Element/wheel_event <<< BEtter scale impl
+ */
+function zoom(event) {
+    event.preventDefault();
+
+    if (event.deltaY < 0) {
+        matrixMagnify()
+    } else if (event.deltaY > 0) {
+        matrixShrink()
+    }
+}
+
+const el = document.getElementById('matrixWindow');
+el.onwheel = zoom;
