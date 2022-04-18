@@ -1,0 +1,52 @@
+{
+	"optimal": [
+		{"person1": "Lorelei Kim", "person2": "Kayleigh Witt"}, 
+		{"person1": "Kristopher Shepherd", "person2": "Billy-Joe Ramirez"}, 
+		{"person1": "Esmay Frost", "person2": "Madelyn Lu"}, 
+		{"person1": "Aminah Townsend", "person2": "Sabrina Mendez"}
+	], 
+	"unpaired": [
+		"Tyrone McGregor", "Antoine Lutz"
+	], 
+	"matrix": {
+		"Sabrina Mendez": {
+			"Sabrina Mendez": 0, "Madelyn Lu": -1, 
+			"Tyrone McGregor": -1, "Aminah Townsend": 1, "Billy-Joe Ramirez": 1, 
+			"Esmay Frost": -1, "Antoine Lutz": 1, "Kristopher Shepherd": 1, 
+			"Kayleigh Witt": -1, "Lorelei Kim": -1}, 
+		"Madelyn Lu": {
+			"Sabrina Mendez": -1, "Madelyn Lu": 0, "Tyrone McGregor": 1, 
+			"Aminah Townsend": -1, "Billy-Joe Ramirez": -1, "Esmay Frost": 1, 
+			"Antoine Lutz": -1, "Kristopher Shepherd": -1, "Kayleigh Witt": 1, "Lorelei Kim": 1}, 
+		"Tyrone McGregor": {
+			"Sabrina Mendez": -1, "Madelyn Lu": 1, "Tyrone McGregor": 0, "Aminah Townsend": -1,
+		 	"Billy-Joe Ramirez": -1, "Esmay Frost": 1, "Antoine Lutz": -1,
+		  	"Kristopher Shepherd": -1, "Kayleigh Witt": 1, "Lorelei Kim": 1},
+		"Aminah Townsend": {
+			"Sabrina Mendez": 1, "Madelyn Lu": -1, "Tyrone McGregor": -1, 
+			"Aminah Townsend": 0, "Billy-Joe Ramirez": 1, "Esmay Frost": -1, 
+			"Antoine Lutz": 1, "Kristopher Shepherd": 1, "Kayleigh Witt": -1, "Lorelei Kim": -1}, 
+		"Billy-Joe Ramirez": {
+			"Sabrina Mendez": 1, "Madelyn Lu": -1, "Tyrone McGregor": -1, 
+			"Aminah Townsend": 1, "Billy-Joe Ramirez": 0, "Esmay Frost": -1, "Antoine Lutz": 1, 
+			"Kristopher Shepherd": 1, "Kayleigh Witt": -1, "Lorelei Kim": -1}, 
+		"Esmay Frost": {
+			"Sabrina Mendez": -1, "Madelyn Lu": 1, "Tyrone McGregor": 1, 
+			"Aminah Townsend": -1, "Billy-Joe Ramirez": -1, "Esmay Frost": 0, 
+			"Antoine Lutz": -1, "Kristopher Shepherd": -1, "Kayleigh Witt": 1, "Lorelei Kim": 1}, 
+		"Antoine Lutz": {
+			"Sabrina Mendez": 1, "Madelyn Lu": -1, "Tyrone McGregor": -1, 
+			"Aminah Townsend": 1, "Billy-Joe Ramirez": 1, "Esmay Frost": -1, 
+			"Antoine Lutz": 0, "Kristopher Shepherd": 1, "Kayleigh Witt": -1, "Lorelei Kim": -1},
+		"Kristopher Shepherd": {
+			"Sabrina Mendez": 1, "Madelyn Lu": -1, "Tyrone McGregor": -1, 
+			"Aminah Townsend": 1, "Billy-Joe Ramirez": 1, "Esmay Frost": -1, 
+			"Antoine Lutz": 1, "Kristopher Shepherd": 0, "Kayleigh Witt": -1, "Lorelei Kim": -1}, 
+		"Kayleigh Witt": {
+			"Sabrina Mendez": -1, "Madelyn Lu": 1, "Tyrone McGregor": 1,
+			"Aminah Townsend": -1, "Billy-Joe Ramirez": -1, "Esmay Frost": 1,
+			"Antoine Lutz": -1, "Kristopher Shepherd": -1, "Kayleigh Witt": 0, "Lorelei Kim": 1},
+		"Lorelei Kim": {
+			"Sabrina Mendez": -1, "Madelyn Lu": 1, "Tyrone McGregor": 1,
+			"Aminah Townsend": -1, "Billy-Joe Ramirez": -1, "Esmay Frost": 1,
+			"Antoine Lutz": -1, "Kristopher Shepherd": -1, "Kayleigh Witt": 1, "Lorelei Kim": 0}}}
