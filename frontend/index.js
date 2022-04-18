@@ -4,12 +4,12 @@ const form = document.getElementById("fileUpload")
     Creates a div representing a 2 student pair
 */
 function createChild(name1, name2, s) {
-    // Div for one cell in matrix. This is a single box in the matrix 
+    // Div for one cell in matrix. This is a single box in the matrix
     let pair = document.createElement("div")
     pair.className = "matrixCell"
 
     let name = document.createElement("p")
-    name.textContent = name1 + ", " + name2 
+    name.textContent = name1 + ", " + name2
 
     // Red if score < 0, grey if score == 0, green if score > 0
     if (s < 0) {
@@ -19,10 +19,10 @@ function createChild(name1, name2, s) {
     } else {
         pair.style.background = "#49d184"
     }
-    
-    // Add names to pair div 
+
+    // Add names to pair div
     pair.appendChild(name)
-    
+
     return pair
 }
 
@@ -32,7 +32,7 @@ function createChild(name1, name2, s) {
 function createMatrix(data) {
     // JSON FORMAT: {p1: {p1: score, ... pn: score}, ..., pn: {p1: score, ... pn: score}}
 
-    const container = document.getElementById("matrixContainer") // Gets container to insert into 
+    const container = document.getElementById("matrixContainer") // Gets container to insert into
 
     for (var p1 in data) {
         let person = document.createElement("div") // Row for the person
@@ -51,7 +51,7 @@ function createMatrix(data) {
 function createOptimal(data) {
     // JSON FORMAT: [{'person1': ..., 'person2': ...}, {...}]
 
-    const container = document.getElementById("optimalList") // Gets container to insert into 
+    const container = document.getElementById("optimalList") // Gets container to insert into
 
     for (var pair of data) {
         let person = document.createElement("li") // Row for the person
@@ -65,7 +65,7 @@ function createOptimal(data) {
 */
 function createUnpaired(data) {
     // JSON FORMAT: ["<name1>", "<name2>", ...]
-    const container = document.getElementById("unpairedList") // Gets container to insert into 
+    const container = document.getElementById("unpairedList") // Gets container to insert into
 
     for (var name of data) {
         let person = document.createElement("li") // Row for the person
@@ -74,7 +74,7 @@ function createUnpaired(data) {
     }
 }
 
-/* 
+/*
     Submits student data and matching headers, receives json response and creates matrix
 */
 async function fetchData() {
@@ -86,10 +86,10 @@ async function fetchData() {
     data.append('headers', file2)
 
     const returnDownloadLink = document.getElementById('excelCheck').checked
-    
-    if (returnDownloadLink) { // Excel download case 
+
+    if (returnDownloadLink) { // Excel download case
         fetch("http:/localhost:5000/download", {
-            method: "POST", 
+            method: "POST",
             body: data
         })
         .then(response => {
@@ -109,9 +109,9 @@ async function fetchData() {
         .catch(err => {
             console.log(err)
         })
-    } else { // Create matrix directly on website 
+    } else { // Create matrix directly on website
         fetch("http:/localhost:5000/upload_data", {
-            method: "POST",     
+            method: "POST",
             body: data
         })
         .then(response => response.json())
@@ -130,18 +130,18 @@ async function fetchData() {
     Clears the current matrix
 */
 function cleanup() {
-    const parent = document.getElementById("matrixContainer") // Gets container to insert into 
-    while (parent.firstChild) {
-        parent.firstChild.remove()
+    const div2 = document.getElementById("matrixContainer") // Gets container to insert into
+    while (div2.firstChild) {
+        div2.firstChild.remove()
     }
 }
 
 /*
-    Handles zooming in on matrix resizing 
+    Handles zooming in on matrix resizing
 */
 function matrixMagnify() {
     let cells = document.getElementsByClassName("matrixCell")
-    
+
     // Increase sides by 4% of screen height
     for (c of cells) {
         const newLength = parseInt(c.offsetHeight + screen.height *0.04) + "px"
@@ -156,7 +156,7 @@ function matrixMagnify() {
 function matrixShrink() {
     let cells = document.getElementsByClassName("matrixCell")
 
-    // Decrease sides by 4% of screen height 
+    // Decrease sides by 4% of screen height
     for (c of cells) {
         const newLength = parseInt(c.offsetHeight - screen.height *0.04) + "px"
         c.style.height = newLength
@@ -164,7 +164,7 @@ function matrixShrink() {
     }
 }
 
-// Form submit event handler 
+// Form submit event handler
 form.onsubmit = function(event) {
     event.preventDefault()
     cleanup()
@@ -172,6 +172,6 @@ form.onsubmit = function(event) {
     return false
 }
 
-// Zoom button click event handlers 
+// Zoom button click event handlers
 document.getElementById("matrixMagnify").addEventListener("click", matrixMagnify);
 document.getElementById("matrixShrink").addEventListener("click", matrixShrink);
