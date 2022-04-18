@@ -7,9 +7,10 @@ function createChild(name1, name2, s) {
     // Div for one cell in matrix. This is a single box in the matrix
     let pair = document.createElement("div")
     pair.className = "matrixCell"
-
-    let name = document.createElement("p")
-    name.textContent = name1 + ", " + name2
+    pair.textContent = name1 + "\r\n" + name2
+    /* let name = document.createElement("p")
+    name.className = "matrixText"
+    name.textContent = name1 + ", " + name2 */
 
     // Red if score < 0, grey if score == 0, green if score > 0
     if (s < 0) {
@@ -21,7 +22,7 @@ function createChild(name1, name2, s) {
     }
 
     // Add names to pair div
-    pair.appendChild(name)
+    //pair.appendChild(name)
 
     return pair
 }
@@ -43,6 +44,7 @@ function createMatrix(data) {
         }
         container.appendChild(person)
     }
+    textFit(document.getElementsByClassName("matrixCell"), {minFontSize:0})
 }
 
 /*
@@ -150,35 +152,25 @@ function cleanup() {
     }
 }
 
+currScale = 1.0
+
 /*
     Handles zooming in on matrix resizing
 */
 function matrixMagnify() {
-    let cells = document.getElementsByClassName("matrixCell")
-
-    // Increase sides by 4% of screen height
-    for (c of cells) {
-        const length = parseInt(c.offsetHeight + screen.height *0.04)
-        const newLength = length + "px"
-        c.style.fontSize = parseInt(length / 2)
-        c.style.height = newLength
-        c.style.width = c.style.height
-    }
+    container = document.getElementById("matrixContainer")
+    currScale += 0.1
+    container.style.transform = "scale(" + currScale + ")"
 }
 
 /*
     Handles zooming out on matrix resizing
 */
 function matrixShrink() {
-    let cells = document.getElementsByClassName("matrixCell")
-
-    // Decrease sides by 4% of screen height
-    for (c of cells) {
-        const length = parseInt(c.offsetHeight - screen.height *0.04)
-        const newLength = length + "px"
-        c.style.fontSize = parseInt(length / 2)
-        c.style.height = newLength
-        c.style.width = c.style.height
+    if (currScale > 0) {
+        container = document.getElementById("matrixContainer")
+        currScale -= 0.1
+        container.style.transform = "scale(" + currScale + ")"
     }
 }
 
