@@ -383,6 +383,7 @@ def makePairings(headers_dataframe, data_dataframe, min_hours):
 
     final_dict = dict()
     final_dict["optimal"] = list()
+    unpaired.extend(students_to_exclude)
 
     for pair in optimal:
         p1, p2 = pair
