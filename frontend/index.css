@@ -242,20 +242,35 @@ input[type="submit" i] {
     justify-content: center;
 }
 
+.matrixBackground {
+  margin: auto;
+  display: flex; 
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 2000px; 
+  width: 2000px; 
+  outline: solid black;
+}
+
 .matrixContainer {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
+    display: flex; 
+    flex-direction: column; /* HERE */
     justify-content: space-evenly;
-    height: 90vh;
-    width: 90vw;
-    overflow-y: auto;
-    overflow-x: auto;
-    white-space: nowrap;
-    margin-bottom: 3vh;
-    padding-top: 3vh;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-    border-radius: 25px;
+    outline: solid red;
+}
+
+.matrixWindow {
+  margin: auto;
+  height: 90vh;
+  width: 90vw;
+  overflow-y: auto;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin-bottom: 3vh; 
+  padding-top: 3vh; 
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  border-radius: 25px;
+  cursor: grab;
 }
 
 .matrixContainer::-webkit-scrollbar {
