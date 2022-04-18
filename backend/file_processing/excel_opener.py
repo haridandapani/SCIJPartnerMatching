@@ -1,7 +1,7 @@
 import pandas as pd # pip3 install pandas
 import openpyxl # pip3 install openpyxl
-import file_processing.comparison as comparison
-#import comparison
+#import file_processing.comparison as comparison
+import comparison
 
 class Header:
     def __init__(self, header, datatype, necessary):
@@ -333,20 +333,20 @@ def runner():
     matrix, legal, allnames, legal_dict = compareAllStudents(allStudents, headers_dict, min_hours)
     
     json_dict = legal_dict_to_json_dict(legal_dict, allnames)
-    print(json_dict)
+    #print(json_dict)
 
     # optimality stuff
 
     # exclusion
     students_to_exclude = exclude_students(allnames, allStudents, headers_dict)
-    print(students_to_exclude)
+    #print(students_to_exclude)
     paiarable_students = allnames.copy()
     paiarable_students = [x for x in paiarable_students if x not in students_to_exclude]
     
-    print(paiarable_students)
+    #print(paiarable_students)
     optimal, unpaired = make_all_pairings(matrix, paiarable_students, legal_dict, headers_dict)
-    print(unpaired)
-    print(optimal)
+    #print(unpaired)
+    #print(optimal)
     unpaired.extend(students_to_exclude)
     final_dict = dict()
     final_dict["optimal"] = list()
@@ -360,7 +360,7 @@ def runner():
 
     final_dict["unpaired"] = unpaired
     final_dict["matrix"] = json_dict
-    print(final_dict)
+    #print(final_dict)
     return final_dict
 
 def makePairings(headers_dataframe, data_dataframe, min_hours):
@@ -398,4 +398,5 @@ def makePairings(headers_dataframe, data_dataframe, min_hours):
     return final_dict
     
 if __name__ == "__main__":
-    runner()
+    final_dict = runner()
+    print(final_dict)

@@ -222,7 +222,7 @@ input[type="submit" i] {
     transition: 0.3s;
     border-radius: 5px;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    border: 1px black;
+    /*border: 1px black; */
 }
 
 .matrixCell:hover {
@@ -256,7 +256,7 @@ input[type="submit" i] {
     display: flex; 
     flex-direction: column; /* HERE */
     justify-content: space-evenly;
-    outline: solid red;
+    /* outline: solid red; */
 }
 
 .matrixWindow {

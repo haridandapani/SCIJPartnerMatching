@@ -118,6 +118,7 @@ async function fetchData() {
         })
         .then(response => response.json())
         .then(data => {
+            console.log(data)
             createMatrix(data.matrix)
             createOptimal(data.optimal)
             createUnpaired(data.unpaired)
