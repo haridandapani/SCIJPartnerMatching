@@ -3,9 +3,13 @@ import openpyxl # pip3 install openpyxl
 #import file_processing.comparison as comparison
 import comparison
 
+# Header class for defining how to parse the headers
 class Header:
+    # Take in the value of the header, its datatype, and whether it is necessary
     def __init__(self, header, datatype, necessary):
         self.header = header
+
+        # If we need to exclude a certain value of the header, extract the parameter from the exclude_if header
         if "exclude_if" in datatype:
             self.datatype = "exclude_if"
             self.parameter = "".join(datatype.split("\"")[1:])
@@ -22,32 +26,36 @@ class Header:
     def __eq__(self, other):
         return self.__class__ == other.__class__ and self.header == other.header
 
+# MatchableStudent class for holding data about individual students within a dictionary
 class MatchableStudent:
     def __init__(self, attributes):
         self.attributes = attributes
     def __repr__(self):
         return self.attributes.__repr__()
 
-
+# Helper function for testing to convert Excel file to dataframe
 def excel_to_df(filepath):
     dataframe = pd.read_excel(filepath, usecols = "A:D")
     return dataframe
 
+# Helper function for testing to convert Excel file to dataframe, including top row
 def excel_to_generic_df(filepath):
     dataframe = pd.read_excel(filepath, header=None)
     return dataframe
 
+# Returns values from dataframe
 def read_excel_file(dataframe):
     return dataframe.values
 
-
+# Gets the indices of each of the headers with the given values, thus corresponding a header with its affiliated column
 def getHeadersIndices(values):
     column_dict = dict()
     for i in range(len(values[0])):
         column_dict[values[0][i]] = i
     return column_dict
 
-
+# Creates a headers dictionary for storing relevant information about headers given values from a dataframe
+# Correlates the name of a header with all of the information that we need about it
 def convertDataframeValuesToHeaders(values):
     headers_dict = dict()
     for head in values:
@@ -57,7 +65,7 @@ def convertDataframeValuesToHeaders(values):
         headers_dict[head[0]] = Header(header, datatype, necessary)
     return headers_dict
 
-
+# Given headers, the numbers of all of the columns, the parsers needed to read the values of each data point, and the dataframe, creates a list of MatchableStudent
 def createStudents(headers_dict, column_dict, parser_dict, data_values):
     allStudents = list()
     for student_values in data_values:
@@ -71,6 +79,7 @@ def createStudents(headers_dict, column_dict, parser_dict, data_values):
         allStudents.append(MatchableStudent(student_attributes))
     return allStudents
 
+# Gets the overlap between two students given the information in the headers
 def compareStudents(student_one, student_two, headers):
     comparators = comparison.getComparators()
     overlap = dict()
@@ -84,7 +93,8 @@ def compareStudents(student_one, student_two, headers):
             overlap[this_header.header] = comp
     return overlap
 
-
+# Returns whether a given overlap between two students is Legal based on if the pairing satisfies all of the necessary criteria in the headers
+# and whether the number of hours that they share is greater than or equal to the minimum number of hours
 def isLegal(overlap, headers, min_hours):
     total_hours = 0
     for key in overlap:
@@ -103,6 +113,7 @@ def isLegal(overlap, headers, min_hours):
             
     return total_hours >= min_hours
 
+# Finds the header associated with the needed name column
 def getNameHeader(headers):
     name = None
     for header_keys in headers:
@@ -110,9 +121,9 @@ def getNameHeader(headers):
             name = headers[header_keys].header
     return name
 
-
+# Creates a matrix for comparing students given all of the students in the list allStudents, the headers to compare with, and
+# the minimum number of hours needed for a legal pairing
 def compareAllStudents(allStudents, headers, min_hours):
-
     name = getNameHeader(headers)
     allnames = list()
     legal = list()
@@ -137,17 +148,10 @@ def compareAllStudents(allStudents, headers, min_hours):
             else:
                 legal_dict[(name_one, name_two)] = -1
                 legal_dict[(name_two, name_one)] = -1
-                
-    #print("{" + "\n".join("{!r}: {!r},".format(k, v) for k, v in matrix.items()) + "}")
-    #print("===============================")
-    #print(legal)
-    #print("===============================")
-    #print(allnames)
-    #print("===============================")
-    #print(legal_dict)
+
     return matrix, legal, allnames, legal_dict
 
-
+# Gets the student with the least number of legal matches given the pairable_dict 
 def get_least_paired_student(pairable_dict):
     least_paired = None
     min_pairs = float('inf')
@@ -159,7 +163,7 @@ def get_least_paired_student(pairable_dict):
             least_paired = student
     return student
 
-
+# Gets the student with the least number of legal matches given that they are in student_list (which should screen for students who pair with a given student)
 def get_least_paired_matchable_students(student_list, pairable_dict):
     possible_students = list()
     min_pairs = float('inf')
@@ -175,6 +179,8 @@ def get_least_paired_matchable_students(student_list, pairable_dict):
 
     return possible_students
 
+# Gets the students from possible_pairings with the most amount of shared optional criteria as student_to_pair
+# Uses overlap_matrix and headers to provide data for comparison
 def compare_optional(student_to_pair, possible_pairings, overlap_matrix, headers):
     possible_students = list()
     max_num_shared = 0
@@ -200,7 +206,8 @@ def compare_optional(student_to_pair, possible_pairings, overlap_matrix, headers
 
     return possible_students
     
-
+# Gets the students from possible_pairings with the most amount of shared time as student_to_pair
+# Uses overlap_matrix and headers to provide data for comparison
 def get_most_hours(student_to_pair, possible_pairings, overlap_matrix, headers):
     possible_students = list()
     max_hours = float('-inf')
@@ -221,35 +228,41 @@ def get_most_hours(student_to_pair, possible_pairings, overlap_matrix, headers):
 
     return possible_students
 
+# Makes the pairings for a given studen given the people they could possibly pair with, the overlap statisics, and the headers
 def make_pairings_for_student(student_to_pair, pairable_dict, overlap_matrix, headers):
 
+    # Get all legal pairings for the student
     possible_pairings = pairable_dict[student_to_pair]
     if len(possible_pairings) == 0:
         return None
     if len(possible_pairings) == 1:
         return possible_pairings[0]
 
+    # Find the legal pairing that has the smallest number of other people that they could pair with
     possible_pairings = get_least_paired_matchable_students(possible_pairings, pairable_dict)
     if len(possible_pairings) == 0:
         return None
     if len(possible_pairings) == 1:
         return possible_pairings[0]
 
+    # Compare students on optional criteria, returning the students that satisfy the most optional criteria
     possible_pairings = compare_optional(student_to_pair, possible_pairings, overlap_matrix, headers)
     if len(possible_pairings) == 0:
         return None
     if len(possible_pairings) == 1:
         return possible_pairings[0]
 
+    # Return the students with the most amount of shared time with the student to pair 
     possible_pairings = get_most_hours(student_to_pair, possible_pairings, overlap_matrix, headers)
     if len(possible_pairings) == 0:
         return None
     else:
         return possible_pairings[0]
 
+# Makess the pairable dictionary for all students given the legality of all pairings and all students' names
+# Returns a dictionary correlating each student to a list of students they could legally pair with
 def make_pairable_dict(allnames, legal_dict):
     pairable_dict = dict()
-    
     for n1 in allnames:
         pairable_dict[n1] = list()
         for n2 in allnames:
@@ -258,6 +271,8 @@ def make_pairable_dict(allnames, legal_dict):
 
     return pairable_dict
 
+# Makes all of the pairings for all of the students given in allnames
+# Returns a list of pairings and all people left unpaired
 def make_all_pairings(overlap_matrix, allnames, legal_dict, headers_dict):
     final_pairings = list()
     unpaired = list()
@@ -278,7 +293,7 @@ def make_all_pairings(overlap_matrix, allnames, legal_dict, headers_dict):
             allnames.remove(second_student)
     return final_pairings, unpaired
     
-
+# Converts legal_dict to something usable by the frontend
 def legal_dict_to_json_dict(legal_dict, allnames):
     json_dict = dict()
     
@@ -289,20 +304,22 @@ def legal_dict_to_json_dict(legal_dict, allnames):
 
     return json_dict
 
+# Gets the headers used for excluding students
 def getExclusionHeaders(headers_dict):
-    excludsion_headers = list()
+    exclusion_headers = list()
     for header in headers_dict:
         if headers_dict[header].datatype == "exclude_if":
-            excludsion_headers.append(header)
-    return excludsion_headers
+            exclusion_headers.append(header)
+    return exclusion_headers
 
+# Returns the list of students to exclude based on allStudents, which contains data about each student and headers_dict
 def exclude_students(allnames, allStudents, headers_dict):
     excludeable = list()
     name = getNameHeader(headers_dict)
-    excludsion_headers = getExclusionHeaders(headers_dict)
+    exclusion_headers = getExclusionHeaders(headers_dict)
     
     for i in range(0, len(allStudents)):
-        for header in excludsion_headers:
+        for header in exclusion_headers:
             parameter = headers_dict[header].parameter
             if allStudents[i].attributes[header] == parameter:
                 student_name = allStudents[i].attributes[name]
@@ -363,27 +380,30 @@ def runner():
     #print(final_dict)
     return final_dict
 
+# Makes the pairings given the headers dataframe, the student data dataframe, and the minimum number of hours needed for legality
 def makePairings(headers_dataframe, data_dataframe, min_hours):
-    # extracting data
+    # extracting data from uploaded files
     headers_values = headers_dataframe.values
     headers_dict = convertDataframeValuesToHeaders(headers_values)
     data_values = data_dataframe.values
     column_dict = getHeadersIndices(data_values)
-
     parser_dict = comparison.getParserDict()
     allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
+
+    # Makes the legal pairings and converts to JSON for returning to frontend
     matrix, legal, allnames, legal_dict = compareAllStudents(allStudents, headers_dict, min_hours)
     json_dict = legal_dict_to_json_dict(legal_dict, allnames)
 
-    
+    # Makes the optimal pairings by excluding students, pairing all students, and then finding unpaired students
     students_to_exclude = exclude_students(allnames, allStudents, headers_dict)
     paiarable_students = allnames.copy()
     paiarable_students = [x for x in paiarable_students if x not in students_to_exclude]
     optimal, unpaired = make_all_pairings(matrix, paiarable_students, legal_dict, headers_dict)
+    unpaired.extend(students_to_exclude)
 
+    # Formats final data for sending to frontend
     final_dict = dict()
     final_dict["optimal"] = list()
-    unpaired.extend(students_to_exclude)
 
     for pair in optimal:
         p1, p2 = pair
