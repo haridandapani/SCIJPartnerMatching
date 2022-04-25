@@ -403,40 +403,47 @@ def runner():
 # Makes the pairings given the headers dataframe, the student data dataframe, and the minimum number of hours needed for legality
 def makePairings(headers_dataframe, data_dataframe, min_hours):
     final_dict = dict()
-    
-    # extracting data from uploaded files
-    headers_values = headers_dataframe.values
-    headers_dict = convertDataframeValuesToHeaders(headers_values)
-    data_values = data_dataframe.values
-    column_dict = getHeadersIndices(data_values)
-    parser_dict = comparison.getParserDict()
-    allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
-    allStudents = removeUnnamedStudents(headers_dict, allStudents)
 
-    # Makes the legal pairings and converts to JSON for returning to frontend
-    matrix, legal, allnames, legal_dict = compareAllStudents(allStudents, headers_dict, min_hours)
-    json_dict = legal_dict_to_json_dict(legal_dict, allnames)
+    try:
+        # extracting data from uploaded files
+        headers_values = headers_dataframe.values
+        headers_dict = convertDataframeValuesToHeaders(headers_values)
+        data_values = data_dataframe.values
+        column_dict = getHeadersIndices(data_values)
+        parser_dict = comparison.getParserDict()
+        allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
+        allStudents = removeUnnamedStudents(headers_dict, allStudents)
 
-    # Makes the optimal pairings by excluding students, pairing all students, and then finding unpaired students
-    students_to_exclude = exclude_students(allnames, allStudents, headers_dict)
-    paiarable_students = allnames.copy()
-    paiarable_students = [x for x in paiarable_students if x not in students_to_exclude]
-    optimal, unpaired = make_all_pairings(matrix, paiarable_students, legal_dict, headers_dict)
-    unpaired.extend(students_to_exclude)
+        # Makes the legal pairings and converts to JSON for returning to frontend
+        matrix, legal, allnames, legal_dict = compareAllStudents(allStudents, headers_dict, min_hours)
+        json_dict = legal_dict_to_json_dict(legal_dict, allnames)
 
-    # Formats final data for sending to frontend
-    
-    final_dict["optimal"] = list()
+        # Makes the optimal pairings by excluding students, pairing all students, and then finding unpaired students
+        students_to_exclude = exclude_students(allnames, allStudents, headers_dict)
+        paiarable_students = allnames.copy()
+        paiarable_students = [x for x in paiarable_students if x not in students_to_exclude]
+        optimal, unpaired = make_all_pairings(matrix, paiarable_students, legal_dict, headers_dict)
+        unpaired.extend(students_to_exclude)
 
-    for pair in optimal:
-        p1, p2 = pair
-        current_dict = dict()
-        current_dict["person1"] = p1
-        current_dict["person2"] = p2
-        final_dict["optimal"].append(current_dict)
+        # Formats final data for sending to frontend
+        
+        final_dict["optimal"] = list()
 
-    final_dict["unpaired"] = unpaired
-    final_dict["matrix"] = json_dict
+        for pair in optimal:
+            p1, p2 = pair
+            current_dict = dict()
+            current_dict["person1"] = p1
+            current_dict["person2"] = p2
+            final_dict["optimal"].append(current_dict)
+
+        final_dict["unpaired"] = unpaired
+        final_dict["matrix"] = json_dict
+        final_dict["success"] = True
+        final_dict["message"] = "Successfully created pairs!"
+
+    except Exception as err:
+        final_dict["success"] = False
+        final_dict["message"] = str(err)
          
     return final_dict
     
