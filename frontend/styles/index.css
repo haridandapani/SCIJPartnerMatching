@@ -13,11 +13,6 @@ padding-top: 5%;
 height: 20%;
 }
 
-h1 {
-  padding-left: 5vw;
-  text-align: left;
-}
-
 img {
   /* width: 500px; */
   float: left;
@@ -47,13 +42,12 @@ ul {
 
 .nav {
   background-color: #1f3552;
-  overflow: hidden;
-  float: right;
   width: 100vw;
   height: 7vh;
   color: white;
   display: flex; 
   align-items: center;
+  padding-left: 2vw;
 }
 
 .nav a {
@@ -105,8 +99,17 @@ padding-top: 2%;
 
 .div2 {
   grid-area: 1 / 1 / 2 / 2;
-  padding: 5vw;
+  margin: auto;
+  margin-top: 5vh;
+  padding: 3vh;
+  display: flex; 
+  align-items: center;
+  flex-direction: column;
+  width: 30vw;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  border-radius: 25px;
 }
+
 
 .div3 {
   grid-area: 1 / 2 / 2 / 3;
