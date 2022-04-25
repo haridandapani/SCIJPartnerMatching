@@ -247,16 +247,15 @@ input[type="submit" i] {
   display: flex; 
   flex-direction: column;
   justify-content: space-evenly;
-  height: 2000px; 
-  width: 2000px; 
-  outline: solid black;
+  height: 200vh; 
+  width: 200vw; 
 }
 
 .matrixContainer {
+    margin-left: 100vw;
     display: flex; 
-    flex-direction: column; /* HERE */
+    flex-direction: column;
     justify-content: space-evenly;
-    /* outline: solid red; */
 }
 
 .matrixWindow {
@@ -289,6 +288,21 @@ border-right: 0;
 background-color: #1f3552;
 }
 
+/* .matrixNameCell {
+    background-color: #f46500;
+    height: 10vh;
+    width: 10vh;
+    min-width: 7vh;
+    min-height: 7vh;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+    border-radius: 5px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    white-space: pre-wrap;
+} */
 
 
 /* CSS to style slider for excel download selection */
