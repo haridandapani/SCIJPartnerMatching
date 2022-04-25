@@ -1,7 +1,7 @@
 import pandas as pd # pip3 install pandas
 import openpyxl # pip3 install openpyxl
-import file_processing.comparison as comparison
-#import comparison
+#import file_processing.comparison as comparison
+import comparison
 
 # Header class for defining how to parse the headers
 class Header:
@@ -59,9 +59,13 @@ def getHeadersIndices(values):
 def convertDataframeValuesToHeaders(values):
     headers_dict = dict()
     for head in values:
-        header = head[0]
-        datatype = head[1]
-        necessary = int(head[2])
+        try:
+            header = head[0]
+            datatype = head[1]
+            necessary = int(head[2])
+        except Exception as err:
+            raise RuntimeError("Necessary header must be a number / Did you upload the right headers file and is it formatted correctly?" +
+                               "... Original Exception: "+ str(type(err)) + " : " + str(err))
         headers_dict[head[0]] = Header(header, datatype, necessary)
     return headers_dict
 
@@ -73,11 +77,26 @@ def createStudents(headers_dict, column_dict, parser_dict, data_values):
         for key in headers_dict:
             header = headers_dict[key]
             datatype = header.datatype
-            parse_function = parser_dict[datatype]
-            
-            student_attributes[key] = parse_function(student_values[column_dict[key]])
+            try:
+                parse_function = parser_dict[datatype]
+            except Exception as err:
+                raise RuntimeError("One of the headers in your header file does not match our predefined types... Original Exception: "+ str(type(err)) + " : " + str(err))
+            try:
+                student_attributes[key] = parse_function(student_values[column_dict[key]])
+            except Exception as err:
+                raise RuntimeError("Could not match one of the headers in the header file with the data file... Original Exception: "+ str(type(err)) + " : " + str(err))
         allStudents.append(MatchableStudent(student_attributes))
     return allStudents
+
+# Removes students with no names / blank rows
+def removeUnnamedStudents(headers_dict, allStudents):
+    name = getNameHeader(headers_dict)
+    output = list()
+    for student in allStudents:
+        if not pd.isna(student.attributes[name]):
+            output.append(student)
+    return output
+            
 
 # Gets the overlap between two students given the information in the headers
 def compareStudents(student_one, student_two, headers):
@@ -115,11 +134,10 @@ def isLegal(overlap, headers, min_hours):
 
 # Finds the header associated with the needed name column
 def getNameHeader(headers):
-    name = None
     for header_keys in headers:
         if headers[header_keys].datatype == "name":
-            name = headers[header_keys].header
-    return name
+            return headers[header_keys].header
+    raise RuntimeError("Your headers file needs to specify at least one header as the name.")
 
 # Creates a matrix for comparing students given all of the students in the list allStudents, the headers to compare with, and
 # the minimum number of hours needed for a legal pairing
@@ -330,20 +348,22 @@ def exclude_students(allnames, allStudents, headers_dict):
 
 def runner():
     # headers stuff
-    dataframe = excel_to_df("../../data/SCIJ_MOCK_HEADERS_EXCLUDE.xlsx") # excel_to_df("../data/mock_headers.xlsx")
+    dataframe = excel_to_df("../../data/SCIJ_MOCK_HEADERS.xlsx") # excel_to_df("../data/mock_headers.xlsx")
     values = read_excel_file(dataframe)
     headers_dict = convertDataframeValuesToHeaders(values)
     #print(headers_dict)
     #print("===============================")
 
     # data stuff
-    data_values = read_excel_file(excel_to_generic_df("../../data/SCIJ_MOCK.xlsx")) # read_excel_file(excel_to_generic_df("../data/simple_data.xlsx"))
+    data_values = read_excel_file(excel_to_generic_df("../../data/SCIJ_MOCK_NUMBER.xlsx")) # read_excel_file(excel_to_generic_df("../data/simple_data.xlsx"))
     column_dict = getHeadersIndices(data_values)
     min_hours = 3
     #print(column_dict)
     #print("===============================")
     parser_dict = comparison.getParserDict()
     allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
+    allStudents = removeUnnamedStudents(headers_dict, allStudents)
+    #for student in allStudents: print(str(student) + '\n')
     #print(allStudents)
     #print("===============================")
     
@@ -382,6 +402,8 @@ def runner():
 
 # Makes the pairings given the headers dataframe, the student data dataframe, and the minimum number of hours needed for legality
 def makePairings(headers_dataframe, data_dataframe, min_hours):
+    final_dict = dict()
+    
     # extracting data from uploaded files
     headers_values = headers_dataframe.values
     headers_dict = convertDataframeValuesToHeaders(headers_values)
@@ -389,6 +411,7 @@ def makePairings(headers_dataframe, data_dataframe, min_hours):
     column_dict = getHeadersIndices(data_values)
     parser_dict = comparison.getParserDict()
     allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
+    allStudents = removeUnnamedStudents(headers_dict, allStudents)
 
     # Makes the legal pairings and converts to JSON for returning to frontend
     matrix, legal, allnames, legal_dict = compareAllStudents(allStudents, headers_dict, min_hours)
@@ -402,7 +425,7 @@ def makePairings(headers_dataframe, data_dataframe, min_hours):
     unpaired.extend(students_to_exclude)
 
     # Formats final data for sending to frontend
-    final_dict = dict()
+    
     final_dict["optimal"] = list()
 
     for pair in optimal:
