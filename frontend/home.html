@@ -28,12 +28,11 @@
   </header-with-logo> -->
 
   <body>
-    <div class="header">
-      <!-- <h1>LOGO GOES HERE</h1> -->
-      <!-- <div id="top-header"> -->
+      <!-- <h1>LOGO GOES HERE</h1>
+      <div id="top-header">
         <div class="logo">
-          <!-- <image src></image> -->
-          <!-- <image src="images/scij_logo.png" width="250px"></image> -->
+          <image src></image>
+          <image src="images/scij_logo.png" width="250px"></image>
         </div>
 
         <div class="nav">
@@ -47,9 +46,11 @@
         <div class="div1">
 
           <h1>Welcome to the SCIJ Pairing Tool</span></h1>
-        </div>
+        </div> -->
 
-    </div>
+        <div class="nav">
+          <h2>SCIJ Pairing Tool</h2>
+        </div>
 
         <div class="div2">
           <h3>Upload Data and Criteria</span></h3>
@@ -62,23 +63,22 @@
 
             <label for="headers">Mininimum Shared Hours to Match On:</label><br>
             <input type="number" step="1" min="0" value="3" id="minHours" name="minHours"><br><br>
-            <label for="excelCheck">Download as excel file?</label><br>
-
+            
+            <!-- <label for="excelCheck">Download as excel file?</label><br>
             <label class="switch">
             <input type="checkbox" name="excelCheck" id="excelCheck">
             <span class="slider round"></span>
-            </label>
-            <br><br>
+            </label> -->
             <input type="submit" value="Submit">
         </form>
         </div>
 
+        <div class="error" id="error"></div>
+
+        <br><br>
         <div class="div6">
-          <h3>Here are the possible matches:</span></h3>
-          <p>Et has minim elitr intellegat. Mea aeterno eleifend antiopam ad,
-            nam no suscipit quaerendum. At nam minimum ponderum. Est audiam animal
-            molestiae te. Ex duo eripuit mentitum.</p>
-          </div>
+          <h3>Possible Matches</span></h3>
+        </div>
 
 
 
@@ -103,11 +103,8 @@
 
 
 
-    <div class="div8">
+    <div class="div6">
       <h3>Here are the optimized pairings:</span></h3>
-      <p>Et has minim elitr intellegat. Mea aeterno eleifend antiopam ad,
-        nam no suscipit quaerendum. At nam minimum ponderum. Est audiam animal
-        molestiae te. Ex duo eripuit mentitum.</p>
         <div class="optimalParent" id="optimalParent">
           <h5>Optimal Pairings</h5>
           <ul id="optimalList"></ul>

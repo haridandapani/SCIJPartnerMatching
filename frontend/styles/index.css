@@ -14,7 +14,7 @@ height: 20%;
 }
 
 h1 {
-  padding-left: 12%;
+  padding-left: 5vw;
   text-align: left;
 }
 
@@ -49,6 +49,11 @@ ul {
   background-color: #1f3552;
   overflow: hidden;
   float: right;
+  width: 100vw;
+  height: 7vh;
+  color: white;
+  display: flex; 
+  align-items: center;
 }
 
 .nav a {
@@ -100,9 +105,7 @@ padding-top: 2%;
 
 .div2 {
   grid-area: 1 / 1 / 2 / 2;
-  padding-left: 10%;
-  padding-top: 5%;
-
+  padding: 5vw;
 }
 
 .div3 {
@@ -133,8 +136,9 @@ padding-top: 2%;
 
 .div6 {
   grid-area: 3 / 1 / 4 / 2;
-  padding-left: 10%;
-  padding-top: 5%;
+  margin: auto;
+  width: 50vw; 
+  text-align: center;
 
 }
 
@@ -148,16 +152,29 @@ padding-top: 2%;
 
 .div8 {
   grid-area: 4 / 1 / 5 / 2;
-  padding-left: 10%;
-  padding-top: 5%;
-  padding-bottom: 5%;
-
+  width: 50vw; 
+  margin: auto;
+  display: flex; 
+  align-items: center;
+  flex-direction: column;
+  padding-top: 5vh;
+  padding-bottom: 5vh;
 }
 
 .div9 {
   grid-area: 4 / 2 / 5 / 3;
   background-color: red;
+}
 
+.error {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  width: 50vw; 
+  margin: auto;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 button{

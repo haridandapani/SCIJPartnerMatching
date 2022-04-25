@@ -1,7 +1,7 @@
 import pandas as pd # pip3 install pandas
 import openpyxl # pip3 install openpyxl
-#import file_processing.comparison as comparison
-import comparison
+import file_processing.comparison as comparison
+#import comparison
 
 # Header class for defining how to parse the headers
 class Header:

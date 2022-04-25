@@ -111,6 +111,15 @@ function createUnpaired(data) {
     }
 }
 
+function handleError(message) {
+    let errorMessage = document.createElement("p")
+    let errorContext = document.createElement("p")
+    errorMessage.textContent = "Something went wrong processing your files"
+    errorContext.textContent = message
+    document.getElementById("error").appendChild(errorMessage)
+    document.getElementById("error").appendChild(errorContext)
+}
+
 async function handleFormExcelSubmission() {
     const file1 = document.getElementById('file1').files[0]
     const file2 = document.getElementById('file2').files[0]
@@ -161,26 +170,18 @@ async function handleFormMatrixSubmission() {
     .then(response => response.json())
     .then(data => {
         console.log(data)
-        createMatrix(data.matrix)
-        createOptimal(data.optimal)
-        createUnpaired(data.unpaired)
+        if (data.success) {
+            createMatrix(data.matrix)
+            createOptimal(data.optimal)
+            createUnpaired(data.unpaired)
+        } else {
+            handleError(data.message)
+        }
+        
     })
     .catch(err => {
         console.log(err)
     })
-}
-
-/*
-    Submits student data and matching headers, receives json response and creates matrix
-*/
-async function fetchData() {
-    const returnDownloadLink = document.getElementById('excelCheck').checked
-
-    if (returnDownloadLink) { // Excel download case
-        handleFormExcelSubmission()
-    } else { // Create matrix directly on website
-        handleFormMatrixSubmission()
-    }
 }
 
 /*
@@ -201,7 +202,11 @@ function cleanup() {
     parent = document.getElementById("unpairedList") // Gets container to insert into 
     while (parent.firstChild) {
         parent.firstChild.remove()
+    }
 
+    parent = document.getElementById("error")
+    while (parent.firstChild) {
+        parent.firstChild.remove()
     }
 }
 
@@ -209,7 +214,7 @@ function cleanup() {
 form.onsubmit = function(event) {
     event.preventDefault()
     cleanup()
-    fetchData()
+    handleFormMatrixSubmission()
     return false
 }
 
