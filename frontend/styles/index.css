@@ -351,6 +351,7 @@ background-color: #1f3552;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 3vh;
 }
 
 .unpaired {
@@ -362,6 +363,7 @@ background-color: #1f3552;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 3vh; 
 }
 
 /* CSS to style slider for excel download selection */
