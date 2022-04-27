@@ -1,6 +1,6 @@
 import pandas as pd
 
-from utils.constants import ALLOWED_EXTENSIONS
+from file_processing.constants import ALLOWED_EXTENSIONS
 
 def is_allowed_file(filename): 
     return '.' in filename \

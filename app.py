@@ -5,7 +5,7 @@ from flask_cors import CORS, cross_origin
 from file_processing.uploads import is_allowed_file, file_to_dataframe
 from file_processing.excel_opener import makePairings
 
-from utils.constants import UPLOAD_FOLDER, MIN_HOURS, UPLOAD_FILE
+from file_processing.constants import UPLOAD_FOLDER, MIN_HOURS, UPLOAD_FILE
 
 app = Flask(__name__, template_folder='templates')
 cors = CORS(app)
