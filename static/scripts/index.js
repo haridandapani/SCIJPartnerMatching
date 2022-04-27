@@ -111,6 +111,17 @@ function createUnpaired(data) {
     }
 }
 
+function createDownloadButton(filename){
+    const downloaddiv = document.getElementById('downloadparent');
+
+    var a = document.createElement("a");
+    downloaddiv.appendChild(a);
+    url = "http://localhost:5000/uploads/"+filename;
+    console.log(url);
+    a.textContent = "Download your file here"
+    a.href = url
+}
+
 function handleError(message) {
     let errorMessage = document.createElement("p")
     let errorContext = document.createElement("p")
@@ -174,9 +185,13 @@ async function handleFormMatrixSubmission() {
             createMatrix(data.matrix)
             createOptimal(data.optimal)
             createUnpaired(data.unpaired)
+            createDownloadButton(data.filename)
+
         } else {
             handleError(data.message)
         }
+
+
         
     })
     .catch(err => {
@@ -204,6 +219,11 @@ function cleanup() {
         parent.firstChild.remove()
     }
 
+    parent = document.getElementById("downloadparent") // Gets container to insert into 
+    while (parent.firstChild) {
+        parent.firstChild.remove()
+    }
+
     parent = document.getElementById("error")
     while (parent.firstChild) {
         parent.firstChild.remove()
@@ -217,5 +237,3 @@ form.onsubmit = function(event) {
     handleFormMatrixSubmission()
     return false
 }
-
-document.getElementById("export").addEventListener("click", handleFormExcelSubmission)

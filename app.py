@@ -87,7 +87,7 @@ def download_specific_file_path(filename):
     # set this up as a route
     # url_for("download_file", name=name) generates download url
     uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
-    return send_from_directory(directory=uploads, path=filename)
+    return send_from_directory(directory=uploads, filename=filename, path=filename)
 
 if __name__ == '__main__': 
     app.secret_key = 'super secret key'
