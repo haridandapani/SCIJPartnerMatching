@@ -470,6 +470,7 @@ def data_to_excel_file(final_dict):
     df_matrix.to_excel(writer, sheet_name='SCIJ Student Pairings', startrow=df_matrix.shape[0] + 5, startcol=0)
     
     # Conditional Formatting of Colors (Green = Legal, Gray = Self, Red = Illegal)
+    
     # This is the row number of the upper leftmost corner cell of the matrix (used for specifying cell range for conditional formatting).
     # The column number would just be 1 as it is Column 2 in the spreadsheet.
     row_upper_left_corner = df_optimal.shape[0] + 4 + df_unpaired.shape[0] + 4 + 2
