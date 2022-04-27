@@ -1,7 +1,11 @@
 body {
-  background-color: white;
+  background-color: #E27D60;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   /* font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
+}
+
+div {
+  background-color: white;
 }
 
 .header {
@@ -42,7 +46,7 @@ ul {
 
 .nav {
   background-color: #1f3552;
-  width: 100vw;
+  width: 99vw;
   height: 7vh;
   color: white;
   display: flex; 
@@ -142,7 +146,7 @@ padding-top: 2%;
   margin: auto;
   width: 50vw; 
   text-align: center;
-
+  background-color: transparent;
 }
 
 .div7 {
@@ -160,8 +164,9 @@ padding-top: 2%;
   display: flex; 
   align-items: center;
   flex-direction: column;
-  padding-top: 5vh;
-  padding-bottom: 5vh;
+  background-color: transparent;
+  margin-top: 2vh;
+  margin-bottom: 5vh;
 }
 
 .div9 {
@@ -226,8 +231,22 @@ input[type="submit" i] {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
 }
 
+.matrixControls {
+  background-color: transparent;
+}
+
 .matrixButton:hover {
     background: #335683;
+}
+
+.matrixParent {
+  padding: 2vh;
+  background-color: white;
+  width: 95vw; 
+  margin: auto;
+  border-radius: 25px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+
 }
 
 .matrixCell {
@@ -287,8 +306,7 @@ input[type="submit" i] {
   white-space: nowrap;
   margin-bottom: 3vh; 
   padding-top: 3vh; 
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-  border-radius: 25px;
+  
   cursor: grab;
 }
 
@@ -324,6 +342,29 @@ background-color: #1f3552;
     white-space: pre-wrap;
 } */
 
+.optimalParent {
+  border-radius: 25px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  width: 95vw; 
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3vh;
+}
+
+.unpaired {
+  border-radius: 25px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  width: 95vw; 
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3vh; 
+}
 
 /* CSS to style slider for excel download selection */
 .switch {
