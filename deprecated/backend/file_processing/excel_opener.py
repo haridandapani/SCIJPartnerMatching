@@ -450,17 +450,14 @@ def makePairings(headers_dataframe, data_dataframe, min_hours):
 def data_to_excel_file(final_dict):
     df_optimal = pd.DataFrame.from_dict(final_dict["optimal"])
     df_optimal.name = "Optimal Pairings"
-    # print(df_optimal)
 
     df_unpaired = pd.DataFrame.from_dict(final_dict["unpaired"])
     df_unpaired.name = "Unpaired Students"
-    # print(df_unpaired)
 
     df_matrix = pd.DataFrame.from_dict(final_dict["matrix"])
     df_matrix.name = "Students Matrix"
-    # print(df_matrix)
     
-    writer = pd.ExcelWriter('demo.xlsx', engine='xlsxwriter')
+    writer = pd.ExcelWriter('student_pairings.xlsx', engine='xlsxwriter')
     workbook = writer.book
     worksheet = workbook.add_worksheet('SCIJ Student Pairings')
     writer.sheets['SCIJ Student Pairings'] = worksheet
@@ -468,14 +465,12 @@ def data_to_excel_file(final_dict):
 
     df_optimal.to_excel(writer, sheet_name='SCIJ Student Pairings', startrow=1, startcol=0)
     worksheet.write_string(df_optimal.shape[0] + 4, 0, df_unpaired.name)
-    # print("optimal shape 0", df_optimal.shape[0])
     df_unpaired.to_excel(writer, sheet_name='SCIJ Student Pairings', startrow=df_optimal.shape[0] + 5, startcol=0)
-    # print("unpaired shape 0", df_unpaired.shape[0])
-    # print("matrix shape 0", df_matrix.shape[0])
     worksheet.write_string(df_optimal.shape[0] + 4 + df_unpaired.shape[0] + 4, 0, df_matrix.name)
     df_matrix.to_excel(writer, sheet_name='SCIJ Student Pairings', startrow=df_matrix.shape[0] + 5, startcol=0)
     
     # Conditional Formatting of Colors (Green = Legal, Gray = Self, Red = Illegal)
+    
     # This is the row number of the upper leftmost corner cell of the matrix (used for specifying cell range for conditional formatting).
     # The column number would just be 1 as it is Column 2 in the spreadsheet.
     row_upper_left_corner = df_optimal.shape[0] + 4 + df_unpaired.shape[0] + 4 + 2
@@ -511,18 +506,6 @@ def data_to_excel_file(final_dict):
     worksheet.set_column(0, col_lower_right_corner, 20)
 
     writer.save()
-
-    # df = pd.DataFrame.from_dict(final_dict, orient='index')
-    # df = df.transpose()
-
-    # df = (df.T)
-    # print(df)
-    # df = pd.DataFrame({'Name': ['A', 'B', 'C', 'D'],
-    #                'Age': [10, 0, 30, 50]})
-
-    # writer = pd.ExcelWriter('demo.xlsx', engine='xlsxwriter')
-    # df.to_excel(writer, sheet_name='Sheet1', index=False)
-    # writer.save()
     
 if __name__ == "__main__":
     final_dict = runner()
