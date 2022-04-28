@@ -59,6 +59,7 @@ function createMatrix(data) {
     container.appendChild(nameRow)
 
     // Each subsequent row first cell is a name cell followed by pair cells
+    
     for (var p1 in data) {
         let person = document.createElement("div") // Row for the person
         person.className = "matrixRow"
@@ -116,7 +117,7 @@ function createDownloadButton(filename){
 
     var a = document.createElement("a");
     downloaddiv.appendChild(a);
-    url = "http://localhost:5000/uploads/"+filename;
+    url = "/uploads/"+filename;
     console.log(url);
     a.textContent = "Download your file here"
     a.href = url
@@ -141,7 +142,7 @@ async function handleFormExcelSubmission() {
     data.append('headers', file2)
     data.append("minHours", minHours)
 
-    fetch("http:/localhost:5000/download", {
+    fetch("/download", {
         method: "POST",
         body: data
     })
@@ -174,7 +175,7 @@ async function handleFormMatrixSubmission() {
     data.append('headers', file2)
     data.append("minHours", minHours)
 
-    fetch("http:/localhost:5000/upload_data", {
+    fetch("upload_data", {
         method: "POST",
         body: data
     })

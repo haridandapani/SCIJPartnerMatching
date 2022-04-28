@@ -1,10 +1,9 @@
 import os
-from flask import Flask, request, redirect, flash, send_from_directory
+from flask import Flask, request, redirect, flash, send_from_directory, render_template
 from flask_cors import CORS, cross_origin
 
 from file_processing.uploads import is_allowed_file, file_to_dataframe
 from file_processing.excel_opener import makePairings
-
 from file_processing.constants import UPLOAD_FOLDER, MIN_HOURS, UPLOAD_FILE
 
 app = Flask(__name__, template_folder='templates')
@@ -12,6 +11,10 @@ cors = CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['TESTING'] = True 
 app.config['CORS_HEADERS'] = 'Content-Type'
+
+@app.route('/')
+def home():
+    return render_template('home.html')
 
 '''
 Endpoint for displaying legal pairings directly in frontend. 
