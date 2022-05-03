@@ -1,3 +1,2 @@
 backend/venv
-*.pyc 
-*.xlsx
+*.pyc
