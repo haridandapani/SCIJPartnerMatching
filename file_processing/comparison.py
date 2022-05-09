@@ -1,6 +1,9 @@
+import pandas as pd
 
 # Takes a string that might have a number in it and extracts the first number, as separated by spaces
 def processNumber(numberString):
+    if pd.isna(numberString):
+        return -1
     numberString = str(numberString)
     for s in numberString.split():
         if s.isdigit():
@@ -8,17 +11,28 @@ def processNumber(numberString):
 
 # Given a name, returns that same name
 def generateName(name):
+    if pd.isna(name):
+        return ""
     return name
 
 # Given a single category, returns the value of that category for comparison
 def generateCategoryFromCategoryOne(category):
+    if pd.isna(category):
+        return ""
     return category
 
 # Given a list of hour-long timeslots separated by ; , returns the distinct hours slots
 def generateListFromHours(hours):
+    if pd.isna(hours):
+        return list()
     if hours != hours:
         return list()
-    return hours.split(";")
+    semicolonsplit = hours.split("; ")
+    commassplit = hours.split(", ")
+    if len(semicolonsplit) > len(commassplit):
+        return semicolonsplit
+    else:
+        return commassplit
 
 # Compares the amount of overlap between two sets of hours
 def compareHours(hours_1, hours_2):

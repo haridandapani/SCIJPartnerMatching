@@ -350,14 +350,14 @@ def exclude_students(allnames, allStudents, headers_dict):
 
 def runner():
     # headers stuff
-    dataframe = excel_to_df("../../data/SCIJ_MOCK_HEADERS.xlsx") # excel_to_df("../data/mock_headers.xlsx")
+    dataframe = excel_to_df("../data/h1.xlsx") # excel_to_df("../data/mock_headers.xlsx")
     values = read_excel_file(dataframe)
     headers_dict = convertDataframeValuesToHeaders(values)
     #print(headers_dict)
     #print("===============================")
 
     # data stuff
-    data_values = read_excel_file(excel_to_generic_df("../../data/SCIJ_MOCK_NUMBER.xlsx")) # read_excel_file(excel_to_generic_df("../data/simple_data.xlsx"))
+    data_values = read_excel_file(excel_to_generic_df("../data/d1.xlsx")) # read_excel_file(excel_to_generic_df("../data/simple_data.xlsx"))
     column_dict = getHeadersIndices(data_values)
     min_hours = 3
     #print(column_dict)
@@ -542,5 +542,5 @@ def data_to_excel_file(final_dict):
     
 if __name__ == "__main__":
     final_dict = runner()
-    data_to_excel_file(final_dict)
-    # print(final_dict)
+    #data_to_excel_file(final_dict)
+    print(final_dict)
