@@ -359,7 +359,7 @@ def runner():
     # data stuff
     data_values = read_excel_file(excel_to_generic_df("../data/d1.xlsx")) # read_excel_file(excel_to_generic_df("../data/simple_data.xlsx"))
     column_dict = getHeadersIndices(data_values)
-    min_hours = 3
+    min_hours = 1
     #print(column_dict)
     #print("===============================")
     parser_dict = comparison.getParserDict()
@@ -412,6 +412,7 @@ def makePairings(headers_dataframe, data_dataframe, min_hours):
         headers_dict = convertDataframeValuesToHeaders(headers_values)
         data_values = data_dataframe.values
         column_dict = getHeadersIndices(data_values)
+        print(column_dict, flush = True)
         parser_dict = comparison.getParserDict()
         allStudents = createStudents(headers_dict, column_dict, parser_dict, data_values[1:])
         allStudents = removeUnnamedStudents(headers_dict, allStudents)

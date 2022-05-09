@@ -2,12 +2,14 @@ import pandas as pd
 
 # Takes a string that might have a number in it and extracts the first number, as separated by spaces
 def processNumber(numberString):
+    numberString = str(numberString)
     if pd.isna(numberString):
         return -1
-    numberString = str(numberString)
     for s in numberString.split():
         if s.isdigit():
             return int(s)
+
+    return -1
 
 # Given a name, returns that same name
 def generateName(name):
