@@ -12,65 +12,32 @@
     <script src="../static/node_modules/textfit/textFit.js"></script>
   </head>
 
-  <!-- <header-with-logo>
-    <div id="top-header">
-      <div id="logo">
-        <img src="images/scij_logo.png">
-      </div>
-
-      <nav>
-        <u1>
-          <li class="active"><a href="#">Student Pairings</a></li>
-          <li><a href="#">Attorney Pairings</a></li>
-        </u1>
-      </nav>
-
-    </div>
-  </header-with-logo> -->
-
   <body>
-      <!-- <h1>LOGO GOES HERE</h1>
-      <div id="top-header">
-        <div class="logo">
-          <image src></image>
-          <image src="images/scij_logo.png" width="250px"></image>
-        </div>
-
-        <div class="nav">
-          <ul>
-            <a class="active" href="#students">Student + Student</a></li>
-            <a href="#attorneys">Attorney + Students</a>
-          </ul>
-        </div>
-        <p></p>
-        <p></p>
-        <div class="div1">
-
-          <h1>Welcome to the SCIJ Pairing Tool</span></h1>
-        </div> -->
-
         <div class="nav">
           <h2>SCIJ Pairing Tool</h2>
         </div>
 
-        <div class="div2">
+        <div class="uploadDataCriteria">
           <h3>Upload Data and Criteria</span></h3>
-          <p>Upload your Google Form data and Criteria as Excel or CSV files here:</p>
+          <p>This website contains a condensed set of instructions.</p> 
+          <a href="https://docs.google.com/document/d/1MoDS36Cq9t5u_ucGYf-RZjfBMiwucwXMivvQNEopZfo/edit?usp=sharing" target="_blank" style="text-align:center">Please click here for more detailed instructions.</a>
           <form id="fileUpload">
+              <p></p>
+              <p>Step 1: On Google Forms, download student responses from the "SCIJ Case Pairings Form" as a CSV or an Excel file. To get an idea of what this file should look like, you may click on "Download Example Data File" to download an example.
+                Upload your file below:</p>
               <label for="data">Data File: <a href = "/uploads/SCIJ_EXAMPLE_DATA.xlsx">Download Example Data File</a></label>
               <br>
               <input type="file" name="data" id="file1" accept=".xlsx,.csv"><br><br>
+              <p>Step 2: Using Google Sheets or Excel, create a data spreadsheet that contains the headers and types of headers that should be taken into account when we generate pairings. 
+                This spreadsheet should contain three columns with the words "header," "type," and "necessary" in the first row of each column. 
+                The headers should match the headers in the Case Pairings Form spreadsheet you downloaded in Step 1. The "necessary" column should consist of 1s and 0s.
+                To get an idea of what this file should look like, you may click on "Download Example Headers File" to download an example.
+                Once you have finalized your spreadsheet, upload the file below:</p>
               <label for="headers">Headers File: <a href = "/uploads/SCIJ_EXAMPLE_HEADERS.xlsx">Download Example Headers File</a></label><br>
               <input type="file" name="headers" id="file2" accept=".xlsx,.csv"><br><br>
-
+              <p>Step 3: Choose the minimum number of hours that two students must share in order to be a legal match.</p>
               <label for="headers">Mininimum Shared Hours to Match On:</label><br>
               <input type="number" step="1" min="0" value="3" id="minHours" name="minHours"><br><br>
-              
-              <!-- <label for="excelCheck">Download as excel file?</label><br>
-              <label class="switch">
-              <input type="checkbox" name="excelCheck" id="excelCheck">
-              <span class="slider round"></span>
-              </label> -->
               <input type="submit" value="Submit">
           </form>
 
@@ -87,6 +54,7 @@
     <div class="matrixParent">
       <div class="div6">
         <h3>Possible Matches</span></h3>
+        <p>Here are legal pairings of students. Green boxes indicate that the corresponding students can be matched with each other; red boxes indicate that they are not a legal pair. Gray represents self.</p>
       </div>
         <div class="matrixControls">
             <button class="matrixButton" id="matrixShrink">-</button>
@@ -105,6 +73,7 @@
 
   <div class="optimalParent" id="optimalParent">
     <h5>Optimal Pairings</h5>
+    <p>Here are optimal pairings of students according to our algorithm.</p>
     <ul id="optimalList"></ul>
   </div>
   
@@ -113,6 +82,7 @@
   
   <div class="unpaired" id="unpaired">
     <h5>Unpaired People</h5>
+    <p>Here are people that need to be paired manually.</p>
     <ul id="unpairedList"></ul>
   </div>
   
@@ -121,10 +91,15 @@
   
   <div class="unpaired" id="downloadparent">
     <h5>Download Button</h5>
+    <p>Click the button to download the matrix of possible matches matrix, list of optimal pairings, and list of unpaired people as an Excel file.</p>
   </div>
   
   <br>
   <br>
+  <p></p>
+  <div style="text-align:center">
+    <a href="https://docs.google.com/document/d/1MoDS36Cq9t5u_ucGYf-RZjfBMiwucwXMivvQNEopZfo/edit?usp=sharing" target="_blank" style="text-align:center">Please click here for more detailed documentation.</a>
+  </div>
   <p></p>
 </div>
 

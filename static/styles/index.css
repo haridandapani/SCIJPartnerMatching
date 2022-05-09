@@ -1,7 +1,6 @@
 body {
   background-color: #E27D60;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  /* font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
 }
 
 div {
@@ -46,7 +45,7 @@ ul {
 
 .nav {
   background-color: #1f3552;
-  width: 99vw;
+  width: 100vw;
   height: 7vh;
   color: white;
   display: flex; 
@@ -63,29 +62,6 @@ ul {
   font-size: 13px;
 }
 
-.nav a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.nav a.active {
-  background-color: #f46500;
-  color: white;
-}
-
-/* .header-img {
-  width: 100%;
-  background: url();
-  background-size: cover;
-  padding-left: 100px;
-} */
-
-#header-with-logo {
-  width: 50%;
-  height: 20px;
-  padding-left: 5%;
-}
-
 .parent {
 display: grid;
 grid-template-columns: repeat(2, 1fr);
@@ -94,84 +70,6 @@ grid-row-gap: 0px;
 max-width: 90%;
 padding-left: 10%;
 padding-top: 2%;
-}
-
-.div1 {
-  padding-top: 5%;
-  padding-left: 20%;
-}
-
-.div2 {
-  grid-area: 1 / 1 / 2 / 2;
-  margin: auto;
-  margin-top: 5vh;
-  padding: 3vh;
-  display: flex; 
-  align-items: center;
-  flex-direction: column;
-  width: 30vw;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-  border-radius: 25px;
-}
-
-
-.div3 {
-  grid-area: 1 / 2 / 2 / 3;
-  padding-left: 20%;
-  padding-right: 5%;
-  /* to align "Next" buttons */
-  padding-top: 5%;
-  display: block;
-
-}
-
-.div4 {
-  grid-area: 2 / 1 / 3 / 2;
-  padding-left: 5%;
-  padding-top: 10%;
-  background-color: orange;
-
-}
-
-.div5 {
-  grid-area: 2 / 2 / 3 / 3;
-  padding-right: 5%;
-  padding-top: 30%;
-  background-color: blue;
-
-}
-
-.div6 {
-  grid-area: 3 / 1 / 4 / 2;
-  margin: auto;
-  width: 50vw; 
-  text-align: center;
-  background-color: transparent;
-}
-
-.div7 {
-  grid-area: 3 / 2 / 4 / 3;
-  padding-right: 5%;
-  padding-top: 10%;
-  background-color: purple;
-
-}
-
-.div8 {
-  grid-area: 4 / 1 / 5 / 2;
-  width: 50vw; 
-  margin: auto;
-  display: flex; 
-  align-items: center;
-  flex-direction: column;
-  background-color: transparent;
-  margin-top: 2vh;
-  margin-bottom: 5vh;
-}
-
-.div9 {
-  grid-area: 4 / 2 / 5 / 3;
-  background-color: red;
 }
 
 .error {
@@ -199,23 +97,6 @@ button{
   cursor: pointer;
 }
 
-.previous{
-  padding-top: 100%;
-}
-
-.next{
-  padding-left: 70%;
-  /* padding-left: 150%; */
-  padding-top: 30%;
-  /* width: 60px; */
-  float: right;
-}
-
-/* .image-button{ */
-  /* padding-left: 75%; */
-  /* padding-top: 5%;
-} */
-
 input[type="submit" i] {
   border: none;
   color: #ffff;
@@ -239,6 +120,20 @@ input[type="submit" i] {
     background: #335683;
 }
 
+h3 {
+  text-align: center;
+}
+
+.uploadDataCriteria {
+  margin-top: 10px;
+  padding: 2vh;
+  background-color: white;
+  width: 95vw; 
+  margin: 40px auto auto auto;
+  border-radius: 25px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
 .matrixParent {
   padding: 2vh;
   background-color: white;
@@ -246,7 +141,6 @@ input[type="submit" i] {
   margin: auto;
   border-radius: 25px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-
 }
 
 .matrixCell {
@@ -325,22 +219,6 @@ border-left: 0;
 border-right: 0;
 background-color: #1f3552;
 }
-
-/* .matrixNameCell {
-    background-color: #f46500;
-    height: 10vh;
-    width: 10vh;
-    min-width: 7vh;
-    min-height: 7vh;
-    margin: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: 0.3s;
-    border-radius: 5px;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    white-space: pre-wrap;
-} */
 
 .optimalParent {
   border-radius: 25px;
