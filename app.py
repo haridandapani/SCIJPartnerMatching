@@ -16,6 +16,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def home():
     return render_template('home.html')
 
+
 '''
 Endpoint for displaying legal pairings directly in frontend. 
 '''
