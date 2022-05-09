@@ -29,7 +29,7 @@ def generateListFromHours(hours):
         return list()
     if hours != hours:
         return list()
-    semicolonsplit = hours.split("; ")
+    semicolonsplit = hours.split(";")
     commassplit = hours.split(", ")
     if len(semicolonsplit) > len(commassplit):
         return semicolonsplit
