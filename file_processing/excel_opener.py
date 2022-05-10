@@ -350,16 +350,16 @@ def exclude_students(allnames, allStudents, headers_dict):
 
 def runner():
     # headers stuff
-    dataframe = excel_to_df("../uploads/EXAMPLE_HEADERS.xlsx") # excel_to_df("../data/mock_headers.xlsx")
+    dataframe = excel_to_df("../data/h1.xlsx") # excel_to_df("../data/mock_headers.xlsx")
     values = read_excel_file(dataframe)
     headers_dict = convertDataframeValuesToHeaders(values)
     #print(headers_dict)
     #print("===============================")
 
     # data stuff
-    data_values = read_excel_file(excel_to_generic_df("../uploads/EXAMPLE_DATA.xlsx")) # read_excel_file(excel_to_generic_df("../data/simple_data.xlsx"))
+    data_values = read_excel_file(excel_to_generic_df("../data/d1.xlsx")) # read_excel_file(excel_to_generic_df("../data/simple_data.xlsx"))
     column_dict = getHeadersIndices(data_values)
-    min_hours = 3
+    min_hours = 1
     #print(column_dict)
     #print("===============================")
     parser_dict = comparison.getParserDict()
@@ -462,21 +462,18 @@ def generateRandomName(length = 8):
 def data_to_excel_file(final_dict):
     df_optimal = pd.DataFrame.from_dict(final_dict["optimal"])
     df_optimal.name = "Optimal Pairings"
-    # print(df_optimal)
 
     df_unpaired = pd.DataFrame.from_dict(final_dict["unpaired"])
     df_unpaired.name = "Unpaired Students"
-    # print(df_unpaired)
 
     df_matrix = pd.DataFrame.from_dict(final_dict["matrix"])
     df_matrix.name = "Students Matrix"
-    # print(df_matrix)
 
     folder = UPLOAD_FOLDER + "/"
     name = generateRandomName(8) + ".xlsx"
     filename = folder + name
     
-    writer = pd.ExcelWriter(filename, engine='xlsxwriter')
+    writer = pd.ExcelWriter('new_demo.xlsx', engine='xlsxwriter')
     workbook = writer.book
     worksheet = workbook.add_worksheet('SCIJ Student Pairings')
     writer.sheets['SCIJ Student Pairings'] = worksheet
@@ -484,12 +481,9 @@ def data_to_excel_file(final_dict):
 
     df_optimal.to_excel(writer, sheet_name='SCIJ Student Pairings', startrow=1, startcol=0)
     worksheet.write_string(df_optimal.shape[0] + 4, 0, df_unpaired.name)
-    # print("optimal shape 0", df_optimal.shape[0])
-    df_unpaired.to_excel(writer, sheet_name='SCIJ Student Pairings', startrow=df_optimal.shape[0] + 5, startcol=0)
-    # print("unpaired shape 0", df_unpaired.shape[0])
-    # print("matrix shape 0", df_matrix.shape[0])
+    df_unpaired.to_excel(writer, sheet_name='SCIJ Student Pairings', startrow=df_optimal.shape[0] + 4 + 1, startcol=0) # "+ 1" because the matrix should start in the row after its title
     worksheet.write_string(df_optimal.shape[0] + 4 + df_unpaired.shape[0] + 4, 0, df_matrix.name)
-    df_matrix.to_excel(writer, sheet_name='SCIJ Student Pairings', startrow=df_matrix.shape[0] + 5, startcol=0)
+    df_matrix.to_excel(writer, sheet_name='SCIJ Student Pairings', startrow=df_optimal.shape[0] + 4 + df_unpaired.shape[0] + 4 + 1, startcol=0)
     
     # Conditional Formatting of Colors (Green = Legal, Gray = Self, Red = Illegal)
     # This is the row number of the upper leftmost corner cell of the matrix (used for specifying cell range for conditional formatting).
@@ -528,20 +522,9 @@ def data_to_excel_file(final_dict):
 
     writer.save()
 
-    # df = pd.DataFrame.from_dict(final_dict, orient='index')
-    # df = df.transpose()
-
-    # df = (df.T)
-    # print(df)
-    # df = pd.DataFrame({'Name': ['A', 'B', 'C', 'D'],
-    #                'Age': [10, 0, 30, 50]})
-
-    # writer = pd.ExcelWriter('demo.xlsx', engine='xlsxwriter')
-    # df.to_excel(writer, sheet_name='Sheet1', index=False)
-    # writer.save()
     return name
     
 if __name__ == "__main__":
     final_dict = runner()
-    #data_to_excel_file(final_dict)
+    data_to_excel_file(final_dict)
     print(final_dict)
